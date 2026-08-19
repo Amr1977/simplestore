@@ -14,12 +14,27 @@ export default function CartPage() {
   const { store, loading: storeLoading } = useStore()
   const subtotal = getCartTotal()
 
-  if (cartLoading || storeLoading || !store) {
+  if (cartLoading || storeLoading) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
         <main className="flex-1 max-w-7xl mx-auto px-4 py-8">
           <LoadingState count={3} />
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  if (!store) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center px-4">
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">المتجر غير متاح حالياً</h2>
+            <p className="text-sm text-gray-500">نعتذر عن الإزعاج، يرجى المحاولة لاحقاً</p>
+          </div>
         </main>
         <Footer />
       </div>

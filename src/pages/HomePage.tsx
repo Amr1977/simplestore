@@ -28,7 +28,7 @@ export default function HomePage() {
     }
   }, [searchQuery, navigate])
 
-  if (storeLoading || !store) {
+  if (storeLoading) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -68,6 +68,28 @@ export default function HomePage() {
         </main>
         <Footer />
         <CartButton />
+      </div>
+    )
+  }
+
+  if (!store) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center px-4">
+          <div className="text-center max-w-sm">
+            <div className="w-16 h-16 rounded-full bg-red-100 flex items-center justify-center mx-auto mb-4 text-red-600">
+              <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                <circle cx="12" cy="12" r="10" />
+                <line x1="12" y1="8" x2="12" y2="12" />
+                <line x1="12" y1="16" x2="12.01" y2="16" />
+              </svg>
+            </div>
+            <h2 className="text-xl font-bold text-gray-900 mb-2">المتجر غير متاح حالياً</h2>
+            <p className="text-sm text-gray-500 mb-6">نعتذر عن الإزعاج، يرجى المحاولة لاحقاً</p>
+          </div>
+        </main>
+        <Footer />
       </div>
     )
   }

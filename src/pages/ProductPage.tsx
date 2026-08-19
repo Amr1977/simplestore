@@ -16,10 +16,39 @@ import type { Product } from '@/types'
 export default function ProductPage() {
   const { id } = useParams<{ id: string }>()
   const navigate = useNavigate()
-  const { storeId } = useStore()
+  const { storeId, loading: storeLoading, store } = useStore()
   const { product, loading, error } = useProduct(storeId, id ?? '')
   const { addToCart, items, updateQuantity } = useCart()
   const { products: relatedProducts, loading: relatedLoading } = useProducts(storeId, product?.categoryId)
+
+  if (storeLoading) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 max-w-7xl mx-auto px-4 pt-4">
+          <LoadingState count={3} />
+        </main>
+        <Footer />
+        <CartButton />
+      </div>
+    )
+  }
+
+  if (!store) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center px-4">
+          <div className="text-center">
+            <h2 className="text-xl font-bold text-gray-900 mb-2">المتجر غير متاح حالياً</h2>
+            <p className="text-sm text-gray-500">نعتذر عن الإزعاج، يرجى المحاولة لاحقاً</p>
+          </div>
+        </main>
+        <Footer />
+        <CartButton />
+      </div>
+    )
+  }
 
   const cartItem = items.find(item => item.productId === id)
   const quantity = cartItem?.quantity ?? 0
