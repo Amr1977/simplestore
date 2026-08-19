@@ -10,12 +10,11 @@ import { formatPrice } from '@/lib/helpers'
 
 export default function CartPage() {
   const navigate = useNavigate()
-  const { items, updateQuantity, removeFromCart, getCartTotal, loading } = useCart()
-  const { store } = useStore()
-  const s = store!
+  const { items, updateQuantity, removeFromCart, getCartTotal, loading: cartLoading } = useCart()
+  const { store, loading: storeLoading } = useStore()
   const subtotal = getCartTotal()
 
-  if (loading) {
+  if (cartLoading || storeLoading || !store) {
     return (
       <div className="min-h-screen flex flex-col">
         <Header />
@@ -26,6 +25,8 @@ export default function CartPage() {
       </div>
     )
   }
+
+  const s = store
 
   return (
     <div className="min-h-screen flex flex-col">
@@ -100,8 +101,8 @@ export default function CartPage() {
                         <span>رسوم التوصيل</span>
                         <span>
                            {s.delivery.freeDeliveryThreshold && subtotal >= s.delivery.freeDeliveryThreshold
-                             ? 'مجاني'
-                             : formatPrice(s.delivery.fee)}
+                            ? 'مجاني'
+                            : formatPrice(s.delivery.fee)}
                         </span>
                       </div>
                     )}

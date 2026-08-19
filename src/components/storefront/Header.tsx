@@ -4,11 +4,22 @@ import { useStore } from '@/features/store/StoreContext'
 import { useCart } from '@/features/cart/CartContext'
 
 export default function Header() {
-  const { store } = useStore()
+  const { store, loading } = useStore()
   const { getCartCount } = useCart()
   const navigate = useNavigate()
   const itemCount = getCartCount()
-  const s = store!
+
+  if (loading || !store) {
+    return (
+      <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
+        <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
+          <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" />
+          <div className="h-5 bg-gray-100 rounded w-32 animate-pulse" />
+          <div className="w-8 h-8 rounded-full bg-gray-100 animate-pulse" />
+        </div>
+      </header>
+    )
+  }
 
   return (
     <header className="sticky top-0 z-50 bg-white/90 backdrop-blur-md border-b border-gray-100">
@@ -22,10 +33,10 @@ export default function Header() {
         </button>
 
         <div className="flex items-center gap-3">
-          {s.logo ? (
+          {store.logo ? (
             <img
-              src={s.logo}
-              alt={s.name}
+              src={store.logo}
+              alt={store.name}
               className="w-8 h-8 rounded-full object-cover"
             />
           ) : (
@@ -34,7 +45,7 @@ export default function Header() {
             </div>
           )}
           <h1 className="text-base font-bold text-gray-900 truncate max-w-[180px] md:max-w-xs">
-            {s.name}
+            {store.name}
           </h1>
         </div>
 

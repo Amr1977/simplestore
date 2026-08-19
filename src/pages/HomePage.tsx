@@ -13,9 +13,7 @@ import { useFeaturedProducts, usePopularProducts } from '@/features/products/use
 import { LoadingState, EmptyState } from '@/components/ui'
 
 export default function HomePage() {
-  const { store } = useStore()
-  const s = store!
-  const { storeId } = useStore()
+  const { store, storeId, loading: storeLoading } = useStore()
   const { categories, loading: categoriesLoading, error: categoriesError } = useCategories(storeId)
   const { products: featured, loading: featuredLoading, error: featuredError } = useFeaturedProducts(storeId)
   const { products: popular, loading: popularLoading, error: popularError } = usePopularProducts(storeId)
@@ -30,12 +28,56 @@ export default function HomePage() {
     }
   }, [searchQuery, navigate])
 
+  if (storeLoading || !store) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1">
+          <div className="max-w-7xl mx-auto px-4 mt-4">
+            <div className="h-12 bg-gray-100 rounded-full animate-pulse" />
+          </div>
+          <div className="max-w-7xl mx-auto px-4 mt-6">
+            <div className="h-40 bg-gray-100 rounded-2xl animate-pulse" />
+          </div>
+          <div className="max-w-7xl mx-auto px-4 mt-6">
+            <div className="h-6 bg-gray-100 rounded w-32 animate-pulse mb-3" />
+            <div className="flex gap-4">
+              {Array.from({ length: 6 }).map((_, i) => (
+                <div key={i} className="shrink-0 w-20">
+                  <div className="w-16 h-16 rounded-full bg-gray-100 animate-pulse mb-2 mx-auto" />
+                  <div className="h-3 bg-gray-100 rounded w-12 mx-auto" />
+                </div>
+              ))}
+            </div>
+          </div>
+          <div className="max-w-7xl mx-auto px-4 mt-8">
+            <div className="h-6 bg-gray-100 rounded w-32 animate-pulse mb-3" />
+            <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+              {Array.from({ length: 4 }).map((_, i) => (
+                <div key={i} className="bg-white rounded-xl overflow-hidden">
+                  <div className="aspect-square bg-gray-100 animate-pulse" />
+                  <div className="p-3 space-y-2">
+                    <div className="h-4 bg-gray-100 rounded w-3/4" />
+                    <div className="h-3 bg-gray-100 rounded w-1/2" />
+                    <div className="h-5 bg-gray-100 rounded w-1/3" />
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        </main>
+        <Footer />
+        <CartButton />
+      </div>
+    )
+  }
+
   return (
     <div className="min-h-screen flex flex-col">
       <Header />
 
       <main className="flex-1">
-        <StoreBanner store={s} />
+        <StoreBanner store={store} />
 
         <div className="max-w-7xl mx-auto px-4 mt-4">
           <form onSubmit={handleSearch} className="relative">

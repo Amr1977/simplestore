@@ -9,12 +9,13 @@ import { formatPhoneForWhatsApp, validateEgyptianPhone } from '@/lib/helpers'
 import { formatPrice } from '@/lib/helpers'
 import Header from '@/components/storefront/Header'
 import Footer from '@/components/storefront/Footer'
+import { LoadingState } from '@/components/ui'
 
 export default function CheckoutPage() {
   const navigate = useNavigate()
   const { items, getCartTotal, clearCart } = useCart()
   const { store } = useStore()
-  const s = store!
+  const { loading: storeLoading } = useStore()
   const [formData, setFormData] = useState({
     customerName: '',
     phone: '',
@@ -25,6 +26,19 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
+  if (storeLoading || !store) {
+    return (
+      <div className="min-h-screen flex flex-col">
+        <Header />
+        <main className="flex-1 max-w-7xl mx-auto px-4 py-8">
+          <LoadingState count={3} />
+        </main>
+        <Footer />
+      </div>
+    )
+  }
+
+  const s = store
   const subtotal = getCartTotal()
   const deliveryFee = s.delivery.enabled
     ? (s.delivery.freeDeliveryThreshold && subtotal >= s.delivery.freeDeliveryThreshold
