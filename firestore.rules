@@ -1,0 +1,48 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function isVendor() {
+      return isAuthenticated() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.role == 'vendor';
+    }
+
+    function belongsToStore(storeId) {
+      return isVendor() && get(/databases/$(database)/documents/users/$(request.auth.uid)).data.storeId == storeId;
+    }
+
+    match /stores/{storeId} {
+      allow read: if true;
+      allow write: if belongsToStore(storeId);
+
+      match /categories/{categoryId} {
+        allow read: if true;
+        allow write: if belongsToStore(storeId);
+      }
+
+      match /products/{productId} {
+        allow read: if true;
+        allow write: if belongsToStore(storeId);
+      }
+
+      match /orders/{orderId} {
+        allow read: if true;
+        allow create: if true;
+        allow update: if belongsToStore(storeId);
+      }
+
+      match /settings/{settingId} {
+        allow read: if true;
+        allow write: if belongsToStore(storeId);
+      }
+    }
+
+    match /users/{userId} {
+      allow read: if isAuthenticated() && request.auth.uid == userId;
+      allow write: if isAuthenticated() && request.auth.uid == userId;
+    }
+  }
+}
