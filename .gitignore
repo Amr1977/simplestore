@@ -48,5 +48,9 @@ android/
 # OS
 Thumbs.db
 
+# Firebase service account keys
+service-account.json
+*.service-account.json
+
 # Seed data
 scripts/seed-demo/seed-output.json
