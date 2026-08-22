@@ -14,6 +14,7 @@ import AdminCategoriesPage from '@/pages/admin/CategoriesPage'
 import AdminOrdersPage from '@/pages/admin/OrdersPage'
 import AdminOrderDetailPage from '@/pages/admin/OrderDetailPage'
 import AdminSettingsPage from '@/pages/admin/SettingsPage'
+import SeedPage from '@/pages/admin/SeedPage'
 
 export default function App() {
   return (
@@ -33,6 +34,7 @@ export default function App() {
       <Route path="/admin/orders" element={<AdminRoute><AdminOrdersPage /></AdminRoute>} />
       <Route path="/admin/orders/:id" element={<AdminRoute><AdminOrderDetailPage /></AdminRoute>} />
       <Route path="/admin/settings" element={<AdminRoute><AdminSettingsPage /></AdminRoute>} />
+      <Route path="/admin/seed" element={<AdminRoute><SeedPage /></AdminRoute>} />
     </Routes>
   )
 }

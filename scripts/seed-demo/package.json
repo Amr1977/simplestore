@@ -1,0 +1,11 @@
+{
+  "name": "seed-demo",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "seed": "tsx seed.ts"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  }
+}
