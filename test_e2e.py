@@ -64,19 +64,26 @@ with sync_playwright() as p:
         print(f"    ERROR: {err}")
     assert_eq(len(page_errors), 0, "No page errors")
 
-    print("\n=== Navigation ===")
-    nav_links = page.evaluate("""() => {
-      const links = Array.from(document.querySelectorAll('a'));
-      return links.map(a => a.getAttribute('href')).filter(Boolean);
+    print("\n=== HTML Lang/Dir ===")
+    html_lang = page.evaluate("document.documentElement.lang")
+    html_dir = page.evaluate("document.documentElement.dir")
+    print(f"  lang={html_lang}, dir={html_dir}")
+    assert_eq(html_lang, "ar", "HTML lang is Arabic")
+    assert_eq(html_dir, "rtl", "HTML dir is RTL")
+
+    print("\n=== Viewport Meta ===")
+    viewport = page.evaluate("""() => {
+      const m = document.querySelector('meta[name="viewport"]');
+      return m ? m.getAttribute('content') : '';
     }""")
-    print(f"  Found {len(nav_links)} links")
+    print(f"  viewport={viewport}")
+    assert_eq("width=device-width" in (viewport or ""), True, "Viewport meta present")
 
     print("\n=== Routing ===")
     page.goto(
         "http://localhost:5173/cart", wait_until="domcontentloaded", timeout=30000
     )
     page.wait_for_timeout(3000)
-    page.screenshot(path="/tmp/e2e_cart.png", full_page=True)
     cart_text = page.inner_text("body")
     print(f"  Cart page text: {repr(cart_text[:200])}")
     assert_eq(
@@ -135,20 +142,39 @@ with sync_playwright() as p:
         "Admin dashboard redirects to login",
     )
 
-    print("\n=== HTML Lang/Dir ===")
-    html_lang = page.evaluate("document.documentElement.lang")
-    html_dir = page.evaluate("document.documentElement.dir")
-    print(f"  lang={html_lang}, dir={html_dir}")
-    assert_eq(html_lang, "ar", "HTML lang is Arabic")
-    assert_eq(html_dir, "rtl", "HTML dir is RTL")
+    print("\n=== Admin Login Form ===")
+    page.goto("http://localhost:5173/admin/login", wait_until="domcontentloaded")
+    page.wait_for_timeout(2000)
 
-    print("\n=== Viewport Meta ===")
-    viewport = page.evaluate("""() => {
-      const m = document.querySelector('meta[name="viewport"]');
-      return m ? m.getAttribute('content') : '';
+    email_input = page.locator(
+        'input[type="email"], input[placeholder*="البريد"], input[placeholder*="email"]'
+    )
+    if email_input.count() > 0:
+        email_input.first.fill("vendor@example.com")
+        page.locator('input[type="password"]').first.fill("password")
+        page.screenshot(path="/tmp/e2e_admin_login_filled.png", full_page=True)
+        print("  Admin login form filled")
+        assert_eq(True, True, "Admin login form has email input")
+    else:
+        print("  No email input found, checking for text inputs")
+        text_inputs = page.locator('input[type="text"]').all()
+        print(f"  Found {len(text_inputs)} text inputs")
+        assert_eq(len(text_inputs) >= 2, True, "Admin login has input fields")
+
+    print("\n=== Theme Color ===")
+    theme_color = page.evaluate("""() => {
+      const meta = document.querySelector('meta[name="theme-color"]');
+      return meta ? meta.getAttribute('content') : null;
     }""")
-    print(f"  viewport={viewport}")
-    assert_eq("width=device-width" in (viewport or ""), True, "Viewport meta present")
+    print(f"  Theme color: {theme_color}")
+    assert_eq(theme_color is not None, True, "Theme color meta tag present")
+
+    print("\n=== Font Loading ===")
+    fonts = page.evaluate("""() => {
+      return document.fonts ? Array.from(document.fonts).map(f => f.family).slice(0, 5) : [];
+    }""")
+    print(f"  Loaded fonts: {fonts}")
+    assert_eq("Tajawal" in fonts, True, "Tajawal font loaded")
 
     print("\n=== Responsive Breakpoints ===")
     for w, h, name in [
@@ -163,11 +189,24 @@ with sync_playwright() as p:
 
     page.set_viewport_size({"width": 390, "height": 844})
 
-    print("\n=== Font Loading ===")
-    fonts = page.evaluate("""() => {
-      return document.fonts ? Array.from(document.fonts).map(f => f.family).slice(0, 5) : [];
+    print("\n=== Accessibility ===")
+    page.goto("http://localhost:5173/admin/login", wait_until="domcontentloaded")
+    page.wait_for_timeout(2000)
+    labels = page.evaluate("""() => {
+      return Array.from(document.querySelectorAll('label')).length;
     }""")
-    print(f"  Loaded fonts: {fonts}")
+    print(f"  Label elements: {labels}")
+    assert_eq(labels >= 2, True, "Has label elements for form inputs")
+
+    print("\n=== SEO Meta ===")
+    description = page.evaluate("""() => {
+      const meta = document.querySelector('meta[name="description"]');
+      return meta ? meta.getAttribute('content') : null;
+    }""")
+    print(f"  Description: {description}")
+    assert_eq(
+        description is not None and len(description) > 0, True, "Has description meta"
+    )
 
     browser.close()
 
