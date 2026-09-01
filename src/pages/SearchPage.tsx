@@ -16,6 +16,12 @@ export default function SearchPage() {
   const [query, setQuery] = useState(initialQuery)
   const { products, loading } = useSearchProducts(storeId, query)
 
+  useEffect(() => {
+    const q = searchParams.get('q')
+    if (q && q !== query) setQuery(q)
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [searchParams])
+
   if (storeLoading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -44,11 +50,6 @@ export default function SearchPage() {
       </div>
     )
   }
-
-  useEffect(() => {
-    const q = searchParams.get('q')
-    if (q) setQuery(q)
-  }, [searchParams])
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()

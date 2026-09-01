@@ -70,6 +70,8 @@ npm run seed
 | `npm run lint` | Run Oxlint |
 | `npm run typecheck` | Run TypeScript compiler |
 | `npm run test` | Run Vitest |
+| `npm run test:e2e` | Run Playwright e2e (uses Firebase emulator) |
+| `npm run test:e2e:ui` | Playwright UI mode |
 | `npm run preview` | Preview production build |
 | `npm run cap:sync` | Sync Capacitor |
 | `npm run cap:build` | Build Android APK |
@@ -85,6 +87,15 @@ npm run seed
 - Firestore rules protect data
 - Admin routes require auth
 - Cloudinary unsigned preset only
+
+## E2E Testing / اختبارات نهاية إلى نهاية
+This project uses [Playwright](https://playwright.dev) for end-to-end browser tests, scoped to the route map in `src/App.tsx`. The suite is the primary regression guard against build-time env var / store-resolution bugs (e.g. the "المتجر غير متاح حالياً" bug fixed in commit `ee72f83` — see `e2e/home.spec.ts`).
+
+- **Run locally:** `npm run test:e2e` (headless) or `npm run test:e2e:ui` (UI mode).
+- **What it does:** Playwright's `webServer` boots the Firebase Local Emulator Suite (Firestore + Auth) and `npm run preview` against the emulator, then `e2e/global-setup.ts` seeds the emulator with the store, categories, products, and a test admin user from `src/data/`.
+- **Emulator flag:** the client connects to the emulator only when `VITE_USE_FIRESTORE_EMULATOR=true` is set at build time. The flag is set automatically by `playwright.config.ts` for the e2e build; it is never set in production deploys, so the live site never accidentally points at the emulator.
+- **Specs:** `e2e/home.spec.ts`, `category.spec.ts`, `product.spec.ts`, `search.spec.ts`, `cart-and-checkout.spec.ts`, `client-side-nav.spec.ts`, `admin-auth.spec.ts`, `admin-products.spec.ts`, `admin-orders.spec.ts`.
+- **CI:** `.github/workflows/deploy.yml` runs `npm run test:e2e` in a `test` job before the `deploy` job, and uploads the Playwright HTML report + traces as artifacts on failure. A failing e2e suite blocks the Firebase deploy.
 
 ## Free Tier Constraints / حدود الباقة المجانية
 - Firebase Spark plan

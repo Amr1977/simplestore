@@ -10,6 +10,8 @@
     "preview": "vite preview",
     "test": "vitest run",
     "test:watch": "vitest",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
     "seed": "tsx scripts/seed-demo/seed.ts",
     "cap:sync": "cap sync android",
     "cap:open": "cap open android",
@@ -28,6 +30,7 @@
     "uuid": "^14.0.2"
   },
   "devDependencies": {
+    "@playwright/test": "^1.62.1",
     "@tailwindcss/postcss": "^4.3.3",
     "@tailwindcss/vite": "^4.3.3",
     "@testing-library/jest-dom": "^7.0.1",
@@ -39,7 +42,7 @@
     "@vitejs/plugin-react": "^6.0.4",
     "autoprefixer": "^10.5.4",
     "firebase-admin": "^14.3.0",
-    "firebase-tools": "^13.30.0",
+    "firebase-tools": "^13.35.1",
     "jsdom": "^26.1.0",
     "oxlint": "^1.75.0",
     "postcss": "^8.5.26",

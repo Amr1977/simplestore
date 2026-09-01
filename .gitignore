@@ -54,3 +54,8 @@ service-account.json
 
 # Seed data
 scripts/seed-demo/seed-output.json
+
+# Playwright
+test-results/
+playwright-report/
+playwright/.cache/
