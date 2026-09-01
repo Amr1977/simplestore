@@ -34,10 +34,10 @@ export default defineConfig({
       stderr: 'pipe',
     },
     {
-      command: `npx vite preview --host 127.0.0.1 --port ${PORT} --strictPort`,
+      command: `npx tsc -b && npx vite build --outDir dist-e2e && npx vite preview --host 127.0.0.1 --port ${PORT} --strictPort --outDir dist-e2e`,
       port: PORT,
       reuseExistingServer: false,
-      timeout: 60_000,
+      timeout: 120_000,
       env: {
         VITE_USE_FIRESTORE_EMULATOR: 'true',
         VITE_STORE_SLUG: 'abu-qir-grocery',

@@ -26,6 +26,12 @@ export default function CheckoutPage() {
   const [submitting, setSubmitting] = useState(false)
   const [submitted, setSubmitted] = useState(false)
 
+  useEffect(() => {
+    if (!storeLoading && items.length === 0 && !submitted) {
+      navigate('/cart')
+    }
+  }, [items.length, navigate, submitted, storeLoading])
+
   if (storeLoading) {
     return (
       <div className="min-h-screen flex flex-col">
@@ -61,12 +67,6 @@ export default function CheckoutPage() {
       : s.delivery.fee)
     : 0
   const total = subtotal + deliveryFee
-
-  useEffect(() => {
-    if (items.length === 0 && !submitted) {
-      navigate('/cart')
-    }
-  }, [items.length, navigate, submitted])
 
   const validate = () => {
     const newErrors: Record<string, string> = {}

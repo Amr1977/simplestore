@@ -59,3 +59,4 @@ scripts/seed-demo/seed-output.json
 test-results/
 playwright-report/
 playwright/.cache/
+dist-e2e/
