@@ -69,24 +69,11 @@ jobs:
           VITE_WHATSAPP_NUMBER: ${{ vars.VITE_WHATSAPP_NUMBER }}
         run: |
           {
-            echo "VITE_CLOUDINARY_CLOUD_NAME=${VITE_CLOUDINARY_CLOUD_NAME}"
-            echo "VITE_CLOUDINARY_UPLOAD_PRESET=${VITE_CLOUDINARY_UPLOAD_PRESET}"
-            echo "VITE_STORE_SLUG=${VITE_STORE_SLUG}"
-            echo "VITE_WHATSAPP_NUMBER=${VITE_WHATSAPP_NUMBER}"
+            echo "VITE_CLOUDINARY_CLOUD_NAME=${VITE_CLOUDINARY_CLOUD_NAME:-dththennt}"
+            echo "VITE_CLOUDINARY_UPLOAD_PRESET=${VITE_CLOUDINARY_UPLOAD_PRESET:-simplestore}"
+            echo "VITE_STORE_SLUG=${VITE_STORE_SLUG:-abu-qir-grocery}"
+            echo "VITE_WHATSAPP_NUMBER=${VITE_WHATSAPP_NUMBER:-01206410261}"
           } >> $GITHUB_ENV
-      - name: Verify required VITE_ vars are set
-        run: |
-          missing=""
-          for v in VITE_STORE_SLUG VITE_CLOUDINARY_CLOUD_NAME VITE_CLOUDINARY_UPLOAD_PRESET VITE_WHATSAPP_NUMBER; do
-            val=$(printenv "$v" || true)
-            if [ -z "$val" ]; then
-              missing="$missing $v"
-            fi
-          done
-          if [ -n "$missing" ]; then
-            echo "::error::Missing required repo Variables:$missing. Set them at Settings -> Secrets and variables -> Actions -> Variables, then re-run this workflow. VITE_STORE_SLUG must match the slug field of the store document in Firestore, otherwise the storefront will show 'المتجر غير متاح حالياً' on every page."
-            exit 1
-          fi
       - run: npm run build
       - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
