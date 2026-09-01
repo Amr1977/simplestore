@@ -13,6 +13,19 @@ jobs:
         with:
           node-version: '20'
       - run: npm ci
+      - name: Inject build-time env vars
+        env:
+          VITE_CLOUDINARY_CLOUD_NAME: ${{ vars.VITE_CLOUDINARY_CLOUD_NAME }}
+          VITE_CLOUDINARY_UPLOAD_PRESET: ${{ vars.VITE_CLOUDINARY_UPLOAD_PRESET }}
+          VITE_STORE_SLUG: ${{ vars.VITE_STORE_SLUG }}
+          VITE_WHATSAPP_NUMBER: ${{ vars.VITE_WHATSAPP_NUMBER }}
+        run: |
+          {
+            echo "VITE_CLOUDINARY_CLOUD_NAME=${VITE_CLOUDINARY_CLOUD_NAME}"
+            echo "VITE_CLOUDINARY_UPLOAD_PRESET=${VITE_CLOUDINARY_UPLOAD_PRESET}"
+            echo "VITE_STORE_SLUG=${VITE_STORE_SLUG}"
+            echo "VITE_WHATSAPP_NUMBER=${VITE_WHATSAPP_NUMBER}"
+          } >> $GITHUB_ENV
       - run: npm run lint
       - run: npm run typecheck
       - run: npm run test

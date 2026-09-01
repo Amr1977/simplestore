@@ -78,6 +78,8 @@ npm run seed
 - **Web (Firebase):** `firebase deploy`
 - **Android:** `npm run cap:build`
 
+> ⚠️ **`VITE_STORE_SLUG` must be present in `.env` at `npm run build` time**, and its value must match the `slug` field of the seeded store document in the Firestore `stores` collection. If it is missing or wrong, the storefront will render "المتجر غير متاح حالياً" on every page for every visitor, because `StoreProvider` will query Firestore for the wrong slug and get no results. For CI / GitHub Actions deploys, `VITE_STORE_SLUG` (and other `VITE_*` vars) must be injected as build-time environment variables or repo secrets — see `.github/workflows/deploy.yml`. The deploy workflow reads `VITE_CLOUDINARY_CLOUD_NAME`, `VITE_CLOUDINARY_UPLOAD_PRESET`, `VITE_STORE_SLUG`, and `VITE_WHATSAPP_NUMBER` from repo **Variables** (Settings → Variables → Actions).
+
 ## Security / الأمان
 - No secrets in client code
 - Firestore rules protect data
