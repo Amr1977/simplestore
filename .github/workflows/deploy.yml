@@ -88,9 +88,9 @@ jobs:
             exit 1
           fi
       - run: npm run build
-      - uses: google-github-actions/auth@v2
+      - uses: FirebaseExtended/action-hosting-deploy@v0
         with:
-          credentials_json: ${{ secrets.FIREBASE_SERVICE_ACCOUNT }}
-      - uses: google-github-actions/deploy-firebase@v2
-        with:
-          project_id: simplestore77
+          repoToken: '${{ secrets.GITHUB_TOKEN }}'
+          firebaseServiceAccount: '${{ secrets.FIREBASE_SERVICE_ACCOUNT }}'
+          channelId: live
+          projectId: simplestore77
