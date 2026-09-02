@@ -1,7 +1,6 @@
 import { useStore } from '@/features/store/StoreContext'
 import { isStoreOpen } from '@/lib/helpers'
-import { Phone, MapPin, Clock, ExternalLink, Download, Globe } from 'lucide-react'
-import { Link } from 'react-router-dom'
+import { Phone, MapPin, Clock } from 'lucide-react'
 import { APP_VERSION } from '@/generated/version'
 import { PORTFOLIO_URL } from '@/lib/links'
 
@@ -48,32 +47,19 @@ export default function Footer() {
             </span>
           </div>
 
-          <div className="pt-4 mt-2 border-t border-border space-y-3">
-            <div className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 text-xs">
-              <Link
-                to="/download"
-                className="inline-flex items-center gap-1.5 text-muted hover:text-primary transition"
-              >
-                <Download size={14} />
-                <span>تحميل التطبيق</span>
-              </Link>
-              <span className="text-border" aria-hidden="true">•</span>
-              <a
-                href={PORTFOLIO_URL}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="inline-flex items-center gap-1.5 text-muted hover:text-primary transition"
-              >
-                <Globe size={14} />
-                <span>المطور</span>
-                <ExternalLink size={11} className="opacity-60" />
-              </a>
-            </div>
-            <div className="flex flex-col sm:flex-row items-center justify-center gap-1 text-xs text-muted">
-              <span>© {new Date().getFullYear()} {store.name}</span>
-              <span className="hidden sm:inline text-border" aria-hidden="true">•</span>
-              <span className="font-mono tabular-nums" dir="ltr">v{APP_VERSION}</span>
-            </div>
+          <div className="pt-4 mt-2 border-t border-border text-center text-xs text-muted">
+            <span className="font-mono tabular-nums" dir="ltr">v{APP_VERSION}</span>
+            <span className="mx-2 text-border" aria-hidden="true">|</span>
+            <a
+              href={PORTFOLIO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-muted hover:text-primary transition"
+            >
+              Amr Lotfy
+            </a>
+            <span className="mx-2 text-border" aria-hidden="true">|</span>
+            <span>جميع الحقوق محفوظة AMR LOTFY</span>
           </div>
         </div>
       </div>

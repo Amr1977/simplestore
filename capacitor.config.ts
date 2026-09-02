@@ -1,7 +1,7 @@
 import { CapacitorConfig } from '@capacitor/cli'
 
 const config: CapacitorConfig = {
-  appId: 'com.example.abuqirgrocery',
+  appId: 'com.amrlotfy.abuqirgrocery',
   appName: 'بقالة أبو قير',
   webDir: 'dist',
   server: {
@@ -10,18 +10,18 @@ const config: CapacitorConfig = {
   android: {
     allowMixedContent: false,
     captureInput: true,
-    webContentsDebuggingEnabled: true,
+    webContentsDebuggingEnabled: false,
   },
   plugins: {
     SplashScreen: {
-      launchShowDuration: 2000,
+      launchShowDuration: 1500,
       launchAutoHide: true,
-      backgroundColor: '#16a34a',
+      backgroundColor: '#f6f1e8',
       androidScaleType: 'CENTER_CROP',
     },
     StatusBar: {
-      style: 'LIGHT',
-      backgroundColor: '#16a34a',
+      style: 'DARK',
+      backgroundColor: '#f6f1e8',
     },
   },
 }

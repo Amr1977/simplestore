@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process'
-import { readFileSync, writeFileSync, existsSync, mkdirSync } from 'node:fs'
+import { readFileSync, writeFileSync, mkdirSync } from 'node:fs'
 import path from 'node:path'
 import { fileURLToPath } from 'node:url'
 
@@ -17,26 +17,15 @@ function safeExec(cmd) {
 const pkg = JSON.parse(readFileSync(path.join(root, 'package.json'), 'utf8'))
 const pkgVersion = pkg.version || '0.0.0'
 
-const tag = safeExec('git describe --tags --abbrev=0')
-const commitsSinceTag = tag
-  ? Number.parseInt(safeExec(`git rev-list ${tag}..HEAD --count`) || '0', 10)
-  : 0
+// Quran_lights pattern: use the package.json version as the displayed version.
+// We don't include the git hash or dirty flag in the user-facing version string —
+// that information is still captured in APP_BUILD for diagnostic purposes.
+const tag = safeExec('git describe --tags --exact-match HEAD')
 const shortSha = safeExec('git rev-parse --short HEAD')
-const dirty = safeExec('git diff --quiet HEAD || echo dirty') === 'dirty'
 const buildTime = new Date().toISOString()
 
-let version = pkgVersion
-if (tag) {
-  const cleanTag = tag.replace(/^v/, '')
-  if (commitsSinceTag > 0) {
-    version = `${cleanTag}+${commitsSinceTag}.${shortSha || 'local'}`
-  } else {
-    version = cleanTag
-  }
-} else if (shortSha) {
-  version = `${pkgVersion}-${shortSha}`
-}
-if (dirty) version += '-dirty'
+// User-facing version: package.json version (e.g. "1.0.0")
+const version = pkgVersion
 
 const info = {
   version,
@@ -68,4 +57,4 @@ writeFileSync(
   'utf8',
 )
 
-console.log(`[version] ${version} (tag=${tag || '-'} commit=${shortSha || '-'} dirty=${dirty})`)
+console.log(`[version] ${version} (commit=${shortSha || '-'})`)

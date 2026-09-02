@@ -3,7 +3,7 @@
  * Update the values here when the portfolio or APK release channel is finalized.
  */
 
-export const PORTFOLIO_URL = 'https://example.com/portfolio'
+export const PORTFOLIO_URL = 'https://amrlotfy.et3am.com'
 
 /**
  * Latest APK release page. This is the link surfaced from the /download page
