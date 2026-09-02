@@ -4,6 +4,14 @@
       "collectionGroup": "products",
       "queryScope": "COLLECTION",
       "fields": [
+        { "fieldPath": "available", "order": "ASCENDING" },
+        { "fieldPath": "sortOrder", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
         { "fieldPath": "categoryId", "order": "ASCENDING" },
         { "fieldPath": "available", "order": "ASCENDING" },
         { "fieldPath": "sortOrder", "order": "ASCENDING" }
@@ -24,6 +32,14 @@
       "fields": [
         { "fieldPath": "popular", "order": "ASCENDING" },
         { "fieldPath": "available", "order": "ASCENDING" },
+        { "fieldPath": "sortOrder", "order": "ASCENDING" }
+      ]
+    },
+    {
+      "collectionGroup": "categories",
+      "queryScope": "COLLECTION",
+      "fields": [
+        { "fieldPath": "active", "order": "ASCENDING" },
         { "fieldPath": "sortOrder", "order": "ASCENDING" }
       ]
     },
