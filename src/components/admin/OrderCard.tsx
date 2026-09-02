@@ -25,7 +25,7 @@ export default function OrderCard({ order }: { order: Order }) {
   const whatsappUrl = `https://wa.me/${formatPhoneForWhatsApp(order.phone)}?text=مرحباً ${order.customerName}، شكراً لطلبك من متجرنا.`
 
   return (
-    <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3" dir="rtl">
+    <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-3" dir="rtl">
       <div className="flex items-center justify-between">
         <span className="text-sm font-mono text-gray-500">#{order.id.slice(-6)}</span>
         <span className={`px-2 py-1 rounded-full text-xs font-medium ${statusMap[status]?.color || 'bg-gray-100 text-gray-700'}`}>

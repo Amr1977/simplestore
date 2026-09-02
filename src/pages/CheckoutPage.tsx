@@ -198,7 +198,7 @@ export default function CheckoutPage() {
 
           <form onSubmit={handleSubmit} className="grid grid-cols-1 lg:grid-cols-3 gap-6">
             <div className="lg:col-span-2 space-y-4">
-              <div className="bg-white border border-gray-200 rounded-xl p-4">
+              <div className="bg-surface-elevated border border-gray-200 rounded-xl p-4">
                 <h3 className="font-semibold text-gray-900 mb-3">معلومات العميل</h3>
 
                 <div className="space-y-3">
@@ -257,7 +257,7 @@ export default function CheckoutPage() {
             </div>
 
             <div className="lg:col-span-1">
-              <div className="bg-white border border-gray-200 rounded-xl p-4 sticky top-20">
+              <div className="bg-surface-elevated border border-gray-200 rounded-xl p-4 sticky top-20">
                 <h3 className="font-semibold text-gray-900 mb-3">ملخص الطلب</h3>
 
                 <div className="space-y-2 text-sm mb-4">

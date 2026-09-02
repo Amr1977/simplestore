@@ -68,7 +68,7 @@ export default function SearchPage() {
       <main className="flex-1">
         <div className="max-w-7xl mx-auto px-4 pt-4">
           <form onSubmit={handleSearch} className="relative">
-            <div className="flex items-center bg-white border border-gray-200 rounded-full shadow-sm">
+            <div className="flex items-center bg-surface-elevated border border-gray-200 rounded-full shadow-sm">
               <button
                 type="submit"
                 className="p-3 text-gray-400 hover:text-primary transition"

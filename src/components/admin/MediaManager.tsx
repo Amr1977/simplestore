@@ -83,16 +83,16 @@ export default function MediaManager({ media, onChange, onUpload, onRemove }: Me
                 <img src={item.thumbnailUrl || item.secureUrl} alt="" className="w-full h-full object-cover" />
               )}
               <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center gap-2">
-                <button type="button" onClick={() => move(index, -1)} className="p-1.5 bg-white rounded-full hover:bg-gray-100">
+                <button type="button" onClick={() => move(index, -1)} className="p-1.5 bg-surface-elevated rounded-full hover:bg-gray-100">
                   <ChevronUp className="w-4 h-4" />
                 </button>
-                <button type="button" onClick={() => move(index, 1)} className="p-1.5 bg-white rounded-full hover:bg-gray-100">
+                <button type="button" onClick={() => move(index, 1)} className="p-1.5 bg-surface-elevated rounded-full hover:bg-gray-100">
                   <ChevronDown className="w-4 h-4" />
                 </button>
-                <button type="button" onClick={() => setPrimary(item.id)} className="p-1.5 bg-white rounded-full hover:bg-gray-100">
+                <button type="button" onClick={() => setPrimary(item.id)} className="p-1.5 bg-surface-elevated rounded-full hover:bg-gray-100">
                   <Star className="w-4 h-4 text-amber-500" />
                 </button>
-                <button type="button" onClick={() => onRemove(item.id)} className="p-1.5 bg-white rounded-full hover:bg-gray-100">
+                <button type="button" onClick={() => onRemove(item.id)} className="p-1.5 bg-surface-elevated rounded-full hover:bg-gray-100">
                   <Trash2 className="w-4 h-4 text-red-600" />
                 </button>
               </div>

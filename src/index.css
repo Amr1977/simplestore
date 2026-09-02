@@ -1,15 +1,58 @@
+@import url('https://fonts.googleapis.com/css2?family=Amiri:wght@400;700&family=Tajawal:wght@300;400;500;700;800&display=swap');
 @import "tailwindcss";
 
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
-  --font-family-sans: 'Tajawal', system-ui, sans-serif;
-  --color-primary: #16a34a;
-  --color-secondary: #15803d;
-  --color-accent: #f59e0b;
-  --color-background: #f8faf7;
-  --color-surface: #ffffff;
-  --color-text: #1a1a1a;
-  --color-muted: #6b7280;
-  --color-border: #e5e7eb;
+  --font-sans: 'Tajawal', system-ui, sans-serif;
+  --font-display: 'Amiri', 'Tajawal', serif;
+  --color-primary: #b04a2f;
+  --color-primary-soft: #d97a5a;
+  --color-secondary: #7a3e1f;
+  --color-accent: #d4a04a;
+  --color-background: #f6f1e8;
+  --color-surface: #fbf7ee;
+  --color-surface-elevated: #ffffff;
+  --color-ink: #2a1f17;
+  --color-ink-soft: #5a4a3a;
+  --color-muted: #8a7a66;
+  --color-border: #e6dcc8;
+  --color-border-strong: #c8b896;
+  --color-success: #5d7a3a;
+  --color-warn: #c25a2a;
+  --color-danger: #a23420;
+  --color-overlay: rgba(42, 31, 23, 0.5);
+}
+
+.dark {
+  --color-primary: #e07852;
+  --color-primary-soft: #f09a78;
+  --color-secondary: #c98a5a;
+  --color-accent: #e0b463;
+  --color-background: #1a1410;
+  --color-surface: #221a14;
+  --color-surface-elevated: #2c2118;
+  --color-ink: #f6f1e8;
+  --color-ink-soft: #cfc4ad;
+  --color-muted: #8a7a66;
+  --color-border: #3a2d20;
+  --color-border-strong: #54432f;
+  --color-success: #8aa55a;
+  --color-warn: #e07852;
+  --color-danger: #d65a3a;
+  --color-overlay: rgba(0, 0, 0, 0.7);
+
+  --color-gray-50: #221a14;
+  --color-gray-100: #2c2118;
+  --color-gray-200: #3a2d20;
+  --color-gray-300: #54432f;
+  --color-gray-400: #8a7a66;
+  --color-gray-500: #a89880;
+  --color-gray-600: #cfc4ad;
+  --color-gray-700: #e3d8c1;
+  --color-gray-800: #f0e8d6;
+  --color-gray-900: #f6f1e8;
+  --color-gray-950: #fdf8ed;
 }
 
 * {
@@ -19,7 +62,7 @@
 }
 
 html {
-  font-family: var(--font-family-sans);
+  font-family: var(--font-sans);
   direction: rtl;
   text-align: right;
   -webkit-text-size-adjust: 100%;
@@ -27,10 +70,11 @@ html {
 
 body {
   background-color: var(--color-background);
-  color: var(--color-text);
+  color: var(--color-ink);
   min-height: 100vh;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  transition: background-color 0.2s ease, color 0.2s ease;
 }
 
 #root {

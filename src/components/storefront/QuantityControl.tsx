@@ -44,7 +44,7 @@ interface QuantityStepperProps {
 
 export function QuantityStepper({ value, onChange, className = '' }: QuantityStepperProps) {
   return (
-    <div className={`inline-flex items-center gap-1 border border-gray-200 rounded-full overflow-hidden bg-white ${className}`}>
+    <div className={`inline-flex items-center gap-1 border border-gray-200 rounded-full overflow-hidden bg-surface-elevated ${className}`}>
       <button
         type="button"
         onClick={() => onChange(Math.max(1, value - 1))}

@@ -57,7 +57,7 @@ export default function CategoriesPage() {
       </div>
 
       {showForm && (
-        <div className="bg-white rounded-xl border border-gray-200 p-4">
+        <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4">
           <CategoryForm
             category={editing}
             onSave={handleSave}
@@ -75,7 +75,7 @@ export default function CategoriesPage() {
       ) : (
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
           {categories.map(cat => (
-            <div key={cat.id} className="bg-white rounded-xl border border-gray-200 p-4 flex items-center justify-between">
+            <div key={cat.id} className="bg-surface-elevated rounded-xl border border-gray-200 p-4 flex items-center justify-between">
               <div>
                 <h4 className="font-medium text-gray-900">{cat.name}</h4>
                 <p className="text-sm text-gray-500">{cat.description}</p>

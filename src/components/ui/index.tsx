@@ -9,7 +9,7 @@ export function LoadingState({ count = 6, className = '' }: LoadingStateProps) {
   return (
     <div className={`grid grid-cols-2 gap-3 sm:grid-cols-3 md:grid-cols-4 ${className}`}>
       {Array.from({ length: count }).map((_, i) => (
-        <div key={i} className="rounded-xl border border-gray-200 bg-white p-3 animate-pulse">
+        <div key={i} className="rounded-xl border border-gray-200 bg-surface-elevated p-3 animate-pulse">
           <div className="aspect-square rounded-lg bg-gray-100 mb-2" />
           <div className="h-4 bg-gray-100 rounded mb-2 w-3/4" />
           <div className="h-3 bg-gray-100 rounded w-1/2" />

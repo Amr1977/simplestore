@@ -47,7 +47,7 @@ export default function OrderDetailPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-3">
         <h4 className="font-bold text-gray-900">معلومات العميل</h4>
         <div className="flex items-center gap-2 text-sm text-gray-700">
           <Phone className="w-4 h-4 text-gray-400" />
@@ -65,7 +65,7 @@ export default function OrderDetailPage() {
         )}
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-3">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-3">
         <h4 className="font-bold text-gray-900">المنتجات</h4>
         <div className="space-y-2">
           {order.items.map((item, i) => (

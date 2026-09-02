@@ -17,7 +17,7 @@ export default function CartButton() {
       <span className="text-sm font-semibold">
         {itemCount} {itemCount === 1 ? 'منتج' : 'منتجات'}
       </span>
-      <span className="bg-white text-primary text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
+      <span className="bg-surface-elevated text-primary text-xs font-bold rounded-full w-5 h-5 flex items-center justify-center">
         {itemCount > 99 ? '99+' : itemCount}
       </span>
     </Link>

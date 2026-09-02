@@ -64,7 +64,7 @@ export default function CartPage() {
                 {items.map(item => (
                   <div
                     key={item.productId}
-                    className="flex gap-3 bg-white border border-gray-200 rounded-xl p-3"
+                    className="flex gap-3 bg-surface-elevated border border-gray-200 rounded-xl p-3"
                   >
                     <div className="w-20 h-20 rounded-lg bg-gray-100 overflow-hidden shrink-0">
                       {item.imageUrl && (
@@ -102,7 +102,7 @@ export default function CartPage() {
               </div>
 
               <div className="lg:col-span-1">
-                <div className="bg-white border border-gray-200 rounded-xl p-4 sticky top-20">
+                <div className="bg-surface-elevated border border-gray-200 rounded-xl p-4 sticky top-20">
                   <h3 className="font-semibold text-gray-900 mb-3">ملخص الطلب</h3>
 
                   <div className="space-y-2 text-sm">

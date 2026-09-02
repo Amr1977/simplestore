@@ -15,7 +15,7 @@ export default function Sidebar() {
 
   return (
     <>
-      <aside className="hidden md:flex flex-col fixed right-0 top-0 bottom-0 w-64 bg-white border-l border-gray-200 z-40">
+      <aside className="hidden md:flex flex-col fixed right-0 top-0 bottom-0 w-64 bg-surface-elevated border-l border-gray-200 z-40">
         <div className="p-4 border-b border-gray-200">
           <h1 className="text-xl font-bold text-green-700">إدارة المتجر</h1>
         </div>
@@ -49,7 +49,7 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 z-40 flex justify-around py-2">
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface-elevated border-t border-gray-200 z-40 flex justify-around py-2">
         {links.map(link => (
           <NavLink
             key={link.to}

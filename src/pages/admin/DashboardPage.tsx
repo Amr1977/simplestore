@@ -42,7 +42,7 @@ export default function DashboardPage() {
   return (
     <div className="space-y-6">
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
-        <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4">
+        <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-blue-100 flex items-center justify-center">
             <ShoppingBag className="w-6 h-6 text-blue-600" />
           </div>
@@ -51,7 +51,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-gray-900">{stats.newOrders}</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4">
+        <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-green-100 flex items-center justify-center">
             <Package className="w-6 h-6 text-green-600" />
           </div>
@@ -60,7 +60,7 @@ export default function DashboardPage() {
             <p className="text-2xl font-bold text-gray-900">{stats.totalProducts}</p>
           </div>
         </div>
-        <div className="bg-white rounded-xl border border-gray-200 p-4 flex items-center gap-4">
+        <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 flex items-center gap-4">
           <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center">
             <AlertCircle className="w-6 h-6 text-red-600" />
           </div>
@@ -71,7 +71,7 @@ export default function DashboardPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4">
         <h3 className="font-bold text-gray-900 mb-4">الطلبات الأخيرة</h3>
         {recentOrders.length === 0 ? (
           <p className="text-gray-500 text-sm">لا توجد طلبات بعد</p>

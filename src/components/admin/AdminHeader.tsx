@@ -16,7 +16,7 @@ export default function AdminHeader() {
   const title = titles[path] || 'لوحة التحكم'
 
   return (
-    <header className="bg-white border-b border-gray-200 sticky top-0 z-30">
+    <header className="bg-surface-elevated border-b border-gray-200 sticky top-0 z-30">
       <div className="flex items-center justify-between px-4 py-3">
         <h2 className="text-lg font-bold text-gray-900">{title}</h2>
         <div className="flex items-center gap-3">

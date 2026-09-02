@@ -12,6 +12,27 @@ import { useCategories } from '@/features/categories/useCategories'
 import { useFeaturedProducts, usePopularProducts } from '@/features/products/useProducts'
 import { LoadingState, EmptyState } from '@/components/ui'
 
+function SectionHeading({ number, title, subtitle }: { number: string; title: string; subtitle: string }) {
+  return (
+    <div className="flex items-end justify-between gap-4 border-b border-border-strong/40 pb-4">
+      <div className="flex items-baseline gap-4">
+        <span
+          className="font-display text-accent/70 text-3xl md:text-4xl font-bold leading-none tabular-nums"
+          aria-hidden="true"
+        >
+          {number}
+        </span>
+        <div>
+          <h2 className="font-display text-2xl md:text-3xl font-bold text-ink leading-tight">
+            {title}
+          </h2>
+          <p className="text-sm text-muted mt-1">{subtitle}</p>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 export default function HomePage() {
   const { store, storeId, loading: storeLoading } = useStore()
   const { categories, loading: categoriesLoading, error: categoriesError } = useCategories(storeId)
@@ -54,7 +75,7 @@ export default function HomePage() {
             <div className="h-6 bg-gray-100 rounded w-32 animate-pulse mb-3" />
             <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
               {Array.from({ length: 4 }).map((_, i) => (
-                <div key={i} className="bg-white rounded-xl overflow-hidden">
+                <div key={i} className="bg-surface-elevated rounded-xl overflow-hidden">
                   <div className="aspect-square bg-gray-100 animate-pulse" />
                   <div className="p-3 space-y-2">
                     <div className="h-4 bg-gray-100 rounded w-3/4" />
@@ -101,23 +122,30 @@ export default function HomePage() {
       <main className="flex-1">
         <StoreBanner store={store} />
 
-        <div className="max-w-7xl mx-auto px-4 mt-4">
+        <div className="max-w-7xl mx-auto px-4 mt-6">
           <form onSubmit={handleSearch} className="relative">
-            <div className={`flex items-center bg-white border rounded-full transition-all duration-200 ${isSearchFocused ? 'border-primary shadow-sm' : 'border-gray-200'}`}>
+            <div
+              className={`flex items-center bg-surface-elevated border transition-all duration-200 ${
+                isSearchFocused
+                  ? 'border-primary shadow-[0_2px_0_0_var(--color-primary)]'
+                  : 'border-border'
+              }`}
+            >
               <button
                 type="submit"
-                className="p-3 text-gray-400 hover:text-primary transition"
+                className="p-3 text-muted hover:text-primary transition"
                 aria-label="بحث"
               >
-                <Search size={20} />
+                <Search size={20} strokeWidth={2} />
               </button>
               <input
                 type="text"
                 value={searchQuery}
                 onChange={(e) => setSearchQuery(e.target.value)}
                 onFocus={() => setIsSearchFocused(true)}
+                onBlur={() => setIsSearchFocused(false)}
                 placeholder="ابحث عن منتجات..."
-                className="w-full py-3 text-sm bg-transparent outline-none placeholder:text-gray-400"
+                className="w-full py-3 text-[15px] bg-transparent outline-none placeholder:text-muted text-ink"
                 dir="rtl"
               />
               {searchQuery && (
@@ -127,7 +155,7 @@ export default function HomePage() {
                     setSearchQuery('')
                     setIsSearchFocused(false)
                   }}
-                  className="p-3 text-gray-400 hover:text-gray-600 transition"
+                  className="p-3 text-muted hover:text-ink transition"
                   aria-label="مسح"
                 >
                   <X size={18} />
@@ -138,17 +166,17 @@ export default function HomePage() {
         </div>
 
         {categories.length > 0 && (
-          <section className="mt-6">
+          <section className="mt-10 md:mt-12">
             <div className="max-w-7xl mx-auto px-4">
-              <h2 className="text-lg font-bold text-gray-900 mb-3">الأقسام</h2>
+              <SectionHeading number="٠٠" title="تصفح حسب القسم" subtitle="اعثر على ما تحتاجه" />
             </div>
-            <div className="max-w-7xl mx-auto px-4">
+            <div className="max-w-7xl mx-auto px-4 mt-5">
               {categoriesLoading ? (
                 <div className="flex gap-4 overflow-hidden">
                   {Array.from({ length: 6 }).map((_, i) => (
                     <div key={i} className="shrink-0 w-20 animate-pulse">
-                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-gray-100 mb-2 mx-auto" />
-                      <div className="h-3 bg-gray-100 rounded w-12 mx-auto" />
+                      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full bg-border/40 mb-2 mx-auto" />
+                      <div className="h-3 bg-border/50 w-12 mx-auto" />
                     </div>
                   ))}
                 </div>
@@ -165,9 +193,9 @@ export default function HomePage() {
           </section>
         )}
 
-        <section className="mt-8">
-          <div className="max-w-7xl mx-auto px-4 mb-3">
-            <h2 className="text-lg font-bold text-gray-900">منتجات مميزة</h2>
+        <section className="mt-12 md:mt-16">
+          <div className="max-w-7xl mx-auto px-4 mb-6">
+            <SectionHeading number="01" title="منتجات مميزة" subtitle="مختارة بعناية لك" />
           </div>
           <div className="max-w-7xl mx-auto px-4">
             {featuredLoading ? (
@@ -177,18 +205,30 @@ export default function HomePage() {
             ) : featured.length === 0 ? (
               <EmptyState title="لا توجد منتجات مميزة" description="تابعنا لاحقاً لمعرفة المنتجات الجديدة" />
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
-                {featured.map(product => (
-                  <ProductCard key={product.id} product={product} />
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
+                {featured.map((product, idx) => (
+                  <div
+                    key={product.id}
+                    className={
+                      idx === 0 && featured.length > 1
+                        ? 'col-span-2 lg:col-span-2 lg:row-span-2'
+                        : ''
+                    }
+                  >
+                    <ProductCard
+                      product={product}
+                      variant={idx === 0 && featured.length > 1 ? 'hero' : 'default'}
+                    />
+                  </div>
                 ))}
               </div>
             )}
           </div>
         </section>
 
-        <section className="mt-8 mb-8">
-          <div className="max-w-7xl mx-auto px-4 mb-3">
-            <h2 className="text-lg font-bold text-gray-900">الأكثر طلباً</h2>
+        <section className="mt-12 md:mt-16 mb-12 md:mb-16">
+          <div className="max-w-7xl mx-auto px-4 mb-6">
+            <SectionHeading number="02" title="الأكثر طلباً" subtitle="ما يفضله عملاؤنا" />
           </div>
           <div className="max-w-7xl mx-auto px-4">
             {popularLoading ? (
@@ -198,7 +238,7 @@ export default function HomePage() {
             ) : popular.length === 0 ? (
               <EmptyState title="لا توجد منتجات شائعة" description="تابعنا لاحقاً" />
             ) : (
-              <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-3 sm:gap-4">
+              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
                 {popular.map(product => (
                   <ProductCard key={product.id} product={product} />
                 ))}

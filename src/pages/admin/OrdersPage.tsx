@@ -31,7 +31,7 @@ export default function OrdersPage() {
             key={f.key}
             onClick={() => setFilter(f.key)}
             className={`px-3 py-1.5 rounded-lg text-sm font-medium whitespace-nowrap transition-colors ${
-              filter === f.key ? 'bg-green-600 text-white' : 'bg-white border border-gray-300 text-gray-700 hover:bg-gray-50'
+              filter === f.key ? 'bg-green-600 text-white' : 'bg-surface-elevated border border-gray-300 text-gray-700 hover:bg-gray-50'
             }`}
           >
             {f.label}

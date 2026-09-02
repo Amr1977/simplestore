@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
-import { ShoppingCart } from 'lucide-react'
+import { ShoppingCart, Plus } from 'lucide-react'
 import type { Product } from '@/types'
 import { formatPrice } from '@/lib/helpers'
 import { useCart } from '@/features/cart/CartContext'
@@ -9,19 +9,19 @@ import { QuantityControl } from './QuantityControl'
 interface ProductCardProps {
   product: Product
   onAddToCart?: () => void
-  variant?: 'default' | 'skeleton'
+  variant?: 'default' | 'skeleton' | 'hero'
 }
 
 export function ProductCardSkeleton() {
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden animate-pulse">
-      <div className="aspect-square bg-gray-100" />
-      <div className="p-3 space-y-2">
-        <div className="h-4 bg-gray-100 rounded w-3/4" />
-        <div className="h-3 bg-gray-100 rounded w-1/2" />
-        <div className="flex items-center justify-between">
-          <div className="h-5 bg-gray-100 rounded w-1/3" />
-          <div className="h-8 w-8 bg-gray-100 rounded-full" />
+    <div className="bg-surface-elevated overflow-hidden animate-pulse">
+      <div className="aspect-square bg-border/40" />
+      <div className="p-4 space-y-2">
+        <div className="h-4 bg-border/50 w-3/4" />
+        <div className="h-3 bg-border/40 w-1/2" />
+        <div className="flex items-end justify-between pt-2">
+          <div className="h-5 bg-border/50 w-1/3" />
+          <div className="h-9 w-9 rounded-full bg-border/50" />
         </div>
       </div>
     </div>
@@ -54,13 +54,26 @@ export function ProductCard({ product, onAddToCart, variant = 'default' }: Produ
   }
 
   const imageUrl = product.media[0]?.secureUrl ?? ''
+  const isHero = variant === 'hero'
+  const hasDiscount = product.oldPrice && product.oldPrice > product.price
+  const discountPct = hasDiscount
+    ? Math.round(((product.oldPrice! - product.price) / product.oldPrice!) * 100)
+    : 0
 
   return (
-    <div className="rounded-xl border border-gray-200 bg-white overflow-hidden group hover:shadow-md transition-shadow duration-200 flex flex-col">
+    <article
+      className={`group relative flex flex-col bg-surface-elevated overflow-hidden transition-all duration-300 ${
+        isHero ? 'lg:row-span-2' : ''
+      }`}
+    >
       <Link to={`/product/${product.id}`} className="block relative">
-        <div className="aspect-square bg-gray-100 overflow-hidden">
+        <div
+          className={`relative overflow-hidden bg-[#f0e8d6] ${
+            isHero ? 'aspect-square lg:aspect-[4/5]' : 'aspect-square'
+          }`}
+        >
           {!imageLoaded && !imageError && (
-            <div className="w-full h-full animate-pulse bg-gray-100" />
+            <div className="absolute inset-0 bg-border/40 animate-pulse" />
           )}
           {!imageError ? (
             <img
@@ -69,50 +82,71 @@ export function ProductCard({ product, onAddToCart, variant = 'default' }: Produ
               loading="lazy"
               onLoad={() => setImageLoaded(true)}
               onError={() => setImageError(true)}
-              className={`w-full h-full object-cover group-hover:scale-105 transition-transform duration-300 ${imageLoaded ? 'opacity-100' : 'opacity-0 absolute inset-0'}`}
+              className={`w-full h-full object-cover transition-all duration-500 ease-out group-hover:scale-[1.04] ${
+                imageLoaded ? 'opacity-100' : 'opacity-0'
+              }`}
             />
           ) : (
-            <div className="w-full h-full flex items-center justify-center text-gray-300">
-              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round">
+            <div className="w-full h-full flex items-center justify-center text-muted">
+              <svg xmlns="http://www.w3.org/2000/svg" width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.25" strokeLinecap="round" strokeLinejoin="round">
                 <rect width="18" height="18" x="3" y="3" rx="2" ry="2" />
                 <circle cx="9" cy="9" r="2" />
                 <path d="m21 15-3.086-3.086a2 2 0 0 0-2.828 0L6 21" />
               </svg>
             </div>
           )}
-        </div>
 
-        <div className="absolute top-2 right-2">
-          <span className={`px-2 py-0.5 text-[10px] font-bold rounded-full ${product.available ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
-            {product.available ? 'متاح' : 'غير متاح'}
-          </span>
-        </div>
+          {hasDiscount && (
+            <div className="absolute top-3 left-3">
+              <span className="inline-flex items-center bg-accent text-ink text-[11px] font-bold px-2.5 py-1 tracking-wide">
+                −{discountPct}٪
+              </span>
+            </div>
+          )}
 
-        {product.oldPrice && product.oldPrice > product.price && (
-          <div className="absolute top-2 left-2">
-            <span className="px-2 py-0.5 text-[10px] font-bold rounded-full bg-accent/10 text-accent">
-              خصم
-            </span>
-          </div>
-        )}
+          {!product.available && (
+            <div className="absolute inset-0 flex items-center justify-center" style={{ backgroundColor: 'var(--color-overlay)' }}>
+              <span className="bg-surface-elevated text-ink text-xs font-bold px-3 py-1.5 tracking-wider">
+                غير متوفر
+              </span>
+            </div>
+          )}
+        </div>
       </Link>
 
-      <div className="p-3 flex flex-col gap-1.5 flex-1">
+      <div className={`flex flex-col flex-1 ${isHero ? 'p-4 lg:p-6' : 'p-4'}`}>
         <Link to={`/product/${product.id}`} className="block">
-          <h3 className="text-sm font-semibold text-gray-900 line-clamp-2 leading-tight hover:text-primary transition-colors">
+          <h3
+            className={`font-bold text-ink leading-snug line-clamp-2 transition-colors group-hover:text-primary ${
+              isHero ? 'text-[15px] lg:text-xl' : 'text-[15px]'
+            }`}
+          >
             {product.name}
           </h3>
         </Link>
 
         {product.unit && (
-          <p className="text-xs text-gray-500">{product.unit}</p>
+          <p className={`text-muted mt-1 ${isHero ? 'text-xs lg:text-sm' : 'text-xs'}`}>
+            {product.unit}
+          </p>
         )}
 
-        <div className="flex items-end justify-between mt-auto pt-1">
+        <div className="flex items-end justify-between mt-auto pt-3">
           <div className="flex flex-col">
-            <span className="text-base font-bold text-primary">{formatPrice(product.price)}</span>
-            {product.oldPrice && product.oldPrice > product.price && (
-              <span className="text-xs text-gray-400 line-through">{formatPrice(product.oldPrice)}</span>
+            <span
+              className={`font-extrabold text-primary leading-none ${
+                isHero ? 'text-lg lg:text-3xl' : 'text-lg'
+              }`}
+            >
+              {formatPrice(product.price)}
+            </span>
+            <span className="text-[11px] text-muted mt-1">
+              جنيه / {product.unit || 'وحدة'}
+            </span>
+            {hasDiscount && (
+              <span className="text-xs text-muted line-through mt-0.5">
+                {formatPrice(product.oldPrice!)}
+              </span>
             )}
           </div>
 
@@ -120,21 +154,32 @@ export function ProductCard({ product, onAddToCart, variant = 'default' }: Produ
             <QuantityControl
               quantity={quantity}
               onUpdate={(q) => updateQuantity(product.id, q)}
-              size="sm"
+              size={isHero ? 'md' : 'sm'}
             />
           ) : (
             <button
               type="button"
               onClick={handleAddToCart}
               disabled={!product.available}
-              className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center hover:bg-primary/90 disabled:bg-gray-200 disabled:text-gray-400 disabled:cursor-not-allowed transition"
-              aria-label="أضف للسلة"
+              aria-label={`أضف ${product.name} للسلة`}
+              className={`inline-flex items-center justify-center rounded-full bg-ink text-surface-elevated transition-all duration-200 ease-out hover:bg-primary disabled:bg-border disabled:text-muted disabled:cursor-not-allowed ${
+                isHero ? 'w-9 h-9 lg:w-11 lg:h-11' : 'w-9 h-9'
+              }`}
             >
-              <ShoppingCart size={16} />
+              {isHero ? <Plus size={16} strokeWidth={2.25} className="lg:hidden" /> : <ShoppingCart size={16} strokeWidth={2.25} />}
+              <Plus size={20} strokeWidth={2.25} className="hidden lg:block" />
             </button>
           )}
         </div>
       </div>
-    </div>
+
+      {isHero && product.description && (
+        <div className="hidden lg:block px-6 pb-6 -mt-1">
+          <p className="text-sm text-ink-soft leading-relaxed line-clamp-2">
+            {product.description}
+          </p>
+        </div>
+      )}
+    </article>
   )
 }

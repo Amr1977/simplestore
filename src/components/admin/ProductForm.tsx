@@ -89,7 +89,7 @@ export default function ProductForm({ product, storeId, categories, onSave, onCa
 
   return (
     <form onSubmit={handleSubmit} className="space-y-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-4">
         <h3 className="font-bold text-gray-900">المعلومات الأساسية</h3>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">اسم المنتج *</label>
@@ -189,7 +189,7 @@ export default function ProductForm({ product, storeId, categories, onSave, onCa
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-4">
         <h3 className="font-bold text-gray-900">الصور والفيديو</h3>
         <MediaManager
           media={media}

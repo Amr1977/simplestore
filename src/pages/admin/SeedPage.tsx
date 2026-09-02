@@ -83,7 +83,7 @@ export default function SeedPage() {
 
   return (
     <div className="space-y-6">
-      <div className="bg-white rounded-xl border border-gray-200 p-6">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-6">
         <h2 className="text-xl font-bold text-gray-900 mb-2">كتابة بيانات تجريبية | Seed Demo Data</h2>
         <p className="text-sm text-gray-500 mb-4">
           سيتم كتابة بيانات المتجر والأقسام والمنتجات إلى Firestore.

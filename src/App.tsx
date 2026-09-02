@@ -6,6 +6,7 @@ import ProductPage from '@/pages/ProductPage'
 import SearchPage from '@/pages/SearchPage'
 import CartPage from '@/pages/CartPage'
 import CheckoutPage from '@/pages/CheckoutPage'
+import DownloadPage from '@/pages/DownloadPage'
 import AdminLoginPage from '@/pages/admin/LoginPage'
 import AdminDashboardPage from '@/pages/admin/DashboardPage'
 import AdminProductsPage from '@/pages/admin/ProductsPage'
@@ -25,6 +26,7 @@ export default function App() {
       <Route path="/search" element={<SearchPage />} />
       <Route path="/cart" element={<CartPage />} />
       <Route path="/checkout" element={<CheckoutPage />} />
+      <Route path="/download" element={<DownloadPage />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
       <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
       <Route path="/admin/products" element={<AdminRoute><AdminProductsPage /></AdminRoute>} />

@@ -4,7 +4,10 @@
   "version": "1.0.0",
   "type": "module",
   "scripts": {
-    "dev": "vite",
+    "dev": "npm run version && vite",
+    "version": "node scripts/generate-version.mjs",
+    "prebuild": "node scripts/generate-version.mjs",
+    "predev": "node scripts/generate-version.mjs",
     "build": "tsc -b && vite build",
     "typecheck": "tsc -b",
     "lint": "oxlint",

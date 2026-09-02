@@ -83,7 +83,7 @@ export default function SettingsPage() {
         <div className="p-3 rounded-lg bg-green-50 border border-green-200 text-green-700 text-sm">{message}</div>
       )}
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-4">
         <h3 className="font-bold text-gray-900">معلومات المتجر</h3>
         <div>
           <label className="block text-sm font-medium text-gray-700 mb-1">اسم المتجر *</label>
@@ -107,7 +107,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-4">
         <h3 className="font-bold text-gray-900">الشعار والبانر</h3>
         <div className="grid grid-cols-2 gap-4">
           <div>
@@ -123,7 +123,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-4">
         <h3 className="font-bold text-gray-900">السمة</h3>
         <div className="flex gap-3">
           {themePresets.map(preset => (
@@ -149,7 +149,7 @@ export default function SettingsPage() {
         <div className="h-12 rounded-lg border border-gray-200" style={{ backgroundColor: theme.primary }} />
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-4">
         <h3 className="font-bold text-gray-900">إعدادات التوصيل</h3>
         <label className="flex items-center gap-2 cursor-pointer">
           <input type="checkbox" checked={delivery.enabled} onChange={e => setDelivery({ ...delivery, enabled: e.target.checked })} className="rounded text-green-600 focus:ring-green-500" />
@@ -171,7 +171,7 @@ export default function SettingsPage() {
         </div>
       </div>
 
-      <div className="bg-white rounded-xl border border-gray-200 p-4 space-y-4">
+      <div className="bg-surface-elevated rounded-xl border border-gray-200 p-4 space-y-4">
         <h3 className="font-bold text-gray-900">ساعات العمل</h3>
         {Object.entries(hours).map(([day, config]) => (
           <div key={day} className="grid grid-cols-3 gap-3 items-center">

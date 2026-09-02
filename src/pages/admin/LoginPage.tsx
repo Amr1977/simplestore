@@ -56,7 +56,7 @@ export function LoginPageInner({
 }) {
   return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50 p-4">
-      <div className="w-full max-w-sm bg-white rounded-xl border border-gray-200 p-6 shadow-sm">
+      <div className="w-full max-w-sm bg-surface-elevated rounded-xl border border-gray-200 p-6 shadow-sm">
         <h1 className="text-2xl font-bold text-center text-gray-900 mb-6">تسجيل دخول المسؤول</h1>
         {error && (
           <div className="mb-4 p-3 rounded-lg bg-red-50 border border-red-200 text-red-700 text-sm">

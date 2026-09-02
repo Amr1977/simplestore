@@ -9,23 +9,24 @@ export default function CategoryCard({ category }: CategoryCardProps) {
   return (
     <Link
       to={`/category/${category.id}`}
-      className="flex flex-col items-center gap-2 min-w-[72px] group"
+      className="flex flex-col items-center gap-2.5 min-w-[76px] group"
     >
-      <div className="w-16 h-16 sm:w-20 sm:h-20 rounded-full overflow-hidden border-2 border-transparent group-hover:border-primary transition-all shadow-sm bg-gray-100">
+      <div className="relative w-[68px] h-[68px] sm:w-20 sm:h-20 overflow-hidden bg-[#f0e8d6] transition-all duration-300 group-hover:bg-accent/20">
         {category.imageUrl ? (
           <img
             src={category.imageUrl}
             alt={category.name}
-            className="w-full h-full object-cover group-hover:scale-110 transition-transform duration-300"
+            className="w-full h-full object-cover transition-transform duration-500 ease-out group-hover:scale-110"
             loading="lazy"
           />
         ) : (
-          <div className="w-full h-full flex items-center justify-center bg-gray-100 text-gray-400">
-            <span className="text-2xl">{category.name.charAt(0)}</span>
+          <div className="w-full h-full flex items-center justify-center text-primary">
+            <span className="font-display text-2xl font-bold">{category.name.charAt(0)}</span>
           </div>
         )}
+        <div className="absolute inset-0 ring-1 ring-inset ring-border-strong/0 group-hover:ring-primary transition-all duration-300" />
       </div>
-      <span className="text-xs sm:text-sm font-medium text-gray-700 text-center truncate w-full">
+      <span className="text-[13px] sm:text-sm font-medium text-ink-soft text-center truncate w-full group-hover:text-primary transition-colors">
         {category.name}
       </span>
     </Link>
