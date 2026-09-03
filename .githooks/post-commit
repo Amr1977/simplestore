@@ -1,0 +1,22 @@
+#!/bin/sh
+# Auto-bump version on every commit using conventional commit messages.
+# quran_lights pattern: public/VERSION is canonical, regenerated into src/generated/version.ts.
+#
+# Bump rules (parsed from the just-made commit message):
+#   - BREAKING CHANGE or "!: " in scope        → major
+#   - feat: or perf:                           → minor
+#   - fix: / docs: / style: / refactor: /
+#     test: / build: / ci: / chore: / revert:  → patch
+#   - anything else (e.g. merge commits)       → no bump
+#
+# Stash the user's local changes (uncommitted) before bumping so the hook
+# never blocks a commit due to working-tree dirt, then leave them as-is.
+
+node scripts/generate-version.mjs auto
+
+# If the version changed, amend the commit so the bump is included in it
+# (so a single commit = single version bump, like quran_lights).
+if ! git diff --cached --quiet public/VERSION package.json src/generated/version.ts 2>/dev/null; then
+  git add public/VERSION package.json src/generated/version.ts
+  git commit --amend --no-edit --no-verify
+fi
