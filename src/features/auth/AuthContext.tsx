@@ -1,13 +1,12 @@
 import { createContext, useContext, useState, useEffect } from 'react'
 import type { ReactNode } from 'react'
 import type { User } from 'firebase/auth'
-import { onAuthChange, loginWithEmail, signUpWithEmail, logout } from '@/firebase/auth'
+import { onAuthChange, loginWithGoogle, logout } from '@/firebase/auth'
 
 export const CreateAuthContext = createContext<{
   user: User | null
   loading: boolean
-  login: (email: string, password: string) => Promise<User>
-  signUp: (email: string, password: string) => Promise<User>
+  loginWithGoogle: () => Promise<User>
   logout: () => Promise<void>
 } | undefined>(undefined)
 
@@ -27,12 +26,8 @@ export function AuthProvider({ children }: AuthProviderProps) {
     return unsubscribe
   }, [])
 
-  const handleLogin = async (email: string, password: string) => {
-    return loginWithEmail(email, password)
-  }
-
-  const handleSignUp = async (email: string, password: string) => {
-    return signUpWithEmail(email, password)
+  const handleLoginWithGoogle = async () => {
+    return loginWithGoogle()
   }
 
   const handleLogout = async () => {
@@ -40,7 +35,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
   }
 
   return (
-    <CreateAuthContext.Provider value={{ user, loading, login: handleLogin, signUp: handleSignUp, logout: handleLogout }}>
+    <CreateAuthContext.Provider value={{ user, loading, loginWithGoogle: handleLoginWithGoogle, logout: handleLogout }}>
       {children}
     </CreateAuthContext.Provider>
   )
@@ -49,7 +44,7 @@ export function AuthProvider({ children }: AuthProviderProps) {
 export function useAuth() {
   const context = useContext(CreateAuthContext)
   if (context === undefined) {
-    throw new Error('يجب استخدام useAuth داخل AuthProvider')
+    throw new Error('يجب استخدام useAuth داخل StoreProvider')
   }
   return context
 }

@@ -1,52 +1,61 @@
 # Session Handoff — Continue Later
 
 ## Done this session
-- Committed `c9a3ccc` and pushed: critical CSS fix removing unlayered `button { background: none }` that was overriding Tailwind's `.bg-ink` utility (root cause of the white-on-white add-to-cart button bug).
-- Cleaned up 8 scratch probe files (`probe-*.mjs`).
-- `npm run typecheck` passes clean.
-- `git status` is clean.
 
-## Where we left off
-- Last verified state in summary: `c9a3ccc` pushed to `github.com:Amr1977/simplestore.git`.
-- `simplestore77.web.app` last deploy was the `f317dee` bundle (`index-CjET_lEK.js`). The `c9a3ccc` CSS fix has NOT been redeployed yet — only committed/pushed to GitHub.
+1. **Versioning fixed** (quran_lights pattern, fully working):
+   - `public/VERSION` is the single canonical semver source (currently `1.0.6`)
+   - `.githooks/post-commit` auto-bumps on conventional commits (no loop)
+   - User-facing version is **always clean** (no `-dirty`, no git hash)
+   - 77/77 tests pass, typecheck clean, deploy succeeded
+
+2. **Per-store logo + admin flow added**:
+   - `src/lib/storeLogo.ts`: procedural SVG logo/banner generator with 5 warm bazaar palettes, Arabic-first Amiri typography. No external CDN dependencies.
+   - `src/components/storefront/Header.tsx`: img onError falls back to the procedural logo if the CDN URL 404s.
+   - `src/data/store.ts`: replaced the broken Cloudinary 404 URLs with procedural SVGs.
+   - **Firestore re-seeded** — the live demo's logo/banner are now the procedural SVGs.
+   - `src/pages/admin/StoreSignupPage.tsx`: public `/admin/signup` — creates a new store + its first admin user + UserProfile.
+   - `src/pages/admin/StoresListPage.tsx`: `/admin/stores` — platform-admin list view of all stores.
+   - `src/components/admin/Sidebar.tsx`: added "Stores" link.
+   - `src/pages/admin/LoginPage.tsx`: added "create new store" link.
+   - Firebase: added `setDoc`, `getAllStores`, `createStore`, `createUserProfile`. Auth: added `signUpWithEmail` + `signUp` in AuthContext.
+   - 7 new unit tests for the logo util. **77/77 tests pass.**
+
+## Live state
+- **Live**: `https://simplestore77.web.app` (footer shows clean `v1.0.6`)
+- **Last commit**: `0309d4f` on `master`, pushed to `github.com:Amr1977/simplestore.git`
 
 ## Next steps (in order)
 
-1. **Re-deploy to Firebase** so the CSS fix goes live:
-   ```
-   npx firebase deploy --only hosting --project simplestore77
-   ```
-   Verify the new bundle hash in the network tab, then re-check an add-to-cart button: `bg` should be `rgb(42, 31, 23)` (dark brown), `color: rgb(255, 255, 255)`.
+1. **CRITICAL — Firestore rules for new collections** (without these, `createUserProfile` will be rejected on first signup):
+   - `userProfiles` collection: allow create if `request.auth.uid == userId`
+   - `stores` collection: allow create (currently may only allow read for known stores)
+   - Check `firestore.rules` and add appropriate rules.
 
-2. **Run unit tests** to confirm 70/70 still pass:
-   ```
-   npm test -- --run
-   ```
+2. **Verify on phone**: visit `https://simplestore77.web.app` — logo should now render in the header (procedural SVG, no more 404). Add to cart still works correctly (CSS fix in `c9a3ccc`).
 
-3. **Run Playwright e2e** to confirm ProductPage redesign + cart flow still pass:
+3. **Test the new admin flow**:
+   - Go to `/admin/login`, click "أنشئ متجراً جديداً" → fill form → should land on `/admin` with the new store active
+   - Existing admins at `/admin/stores` should see the new store in the list
+
+4. **Capacitor local verification**:
    ```
-   npx playwright test e2e/happy-path.spec.ts
-   ```
-
-4. **Mobile-first audit** (still on the queue): `ProductCard`, `HomePage`, `Header` have many `md:col-span-2 lg:col-span-2` patterns where base mobile styles are an afterthought. Target a clean mobile-first pass.
-
-5. **Dark mode overlay scrim**: in `src/components/storefront/ProductCard.tsx`, `bg-ink/40` for the "غير متوفر" scrim resolves to cream (not dark) in dark mode. Replace with a `var(--color-overlay)` token like the Header drawer fix.
-
-6. **Store logo URL**: `https://res.cloudinary.com/demo/image/upload/grocery-demo/stores/abu-qir-demo/logo` 404s. Either replace with a working logo or add a graceful fallback. Search: `src/data/store.ts` or wherever the store metadata is.
-
-7. **Capacitor verification locally**:
-   ```
+   npx cap add android  # one-time, creates android/ dir
    npx cap sync android
    ```
 
-8. **Optional: release signing key** — set `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`, `ANDROID_STORE_PASSWORD` as GitHub secrets to enable release-signed APKs in `.github/workflows/android.yml`.
+5. **Optional: release signing key** — set `ANDROID_KEYSTORE_BASE64`, `ANDROID_KEY_ALIAS`, `ANDROID_KEY_PASSWORD`, `ANDROID_STORE_PASSWORD` as GitHub secrets to enable release-signed APKs in `.github/workflows/android.yml`.
+
+6. **Mobile-first audit** (still on the queue): `ProductCard`, `HomePage`, `Header` — many `md:col-span-2 lg:col-span-2` patterns where base mobile styles are an afterthought.
 
 ## Key file references
-- `src/index.css:95` — the CSS fix (now committed, needs redeploy).
-- `src/components/storefront/ProductCard.tsx` — has `bg-ink text-surface-elevated` on add buttons; check the scrim here for item #5.
-- `src/components/storefront/Footer.tsx` — already on quran_lights pattern, uses `APP_VERSION` from `src/lib/version.ts`.
-- `scripts/generate-version.mjs` — clean version (no git hash).
-- `D:/projects/quran_lights_web/public/index.html:593-601` — source of the quran_lights footer pattern.
+- `src/lib/storeLogo.ts:1` — procedural logo generator (the centerpiece of the logo fix)
+- `src/pages/admin/StoreSignupPage.tsx:1` — public store + admin signup
+- `src/pages/admin/StoresListPage.tsx:1` — admin store list
+- `src/data/store.ts:1` — demo store data (now uses procedural logos)
+- `src/firebase/firestore.ts:185-200` — new helpers (`getAllStores`, `createStore`, `createUserProfile`)
+- `src/firebase/auth.ts:14-17` — `signUpWithEmail`
+- `src/components/storefront/Header.tsx:62-75` — img onError fallback
+- `src/generated/version.ts` — auto-generated, **do not edit**
 
-## Aesthetic direction (don't forget)
+## Aesthetic direction
 "Bazaar / editorial" — terracotta `#b04a2f`, saffron `#d4a04a`, cream `#f6f1e8`, Amiri Arabic display font, asymmetric hero card spanning 2 rows on `lg:`. Flagship quality, not MVP, not generic AI-slop.

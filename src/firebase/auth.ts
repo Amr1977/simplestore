@@ -1,19 +1,17 @@
 import {
-  signInWithEmailAndPassword,
+  GoogleAuthProvider,
+  signInWithPopup,
   signOut,
-  createUserWithEmailAndPassword,
   onAuthStateChanged,
   User,
 } from 'firebase/auth'
 import { auth } from './config'
 
-export async function loginWithEmail(email: string, password: string) {
-  const cred = await signInWithEmailAndPassword(auth, email, password)
-  return cred.user
-}
+const googleProvider = new GoogleAuthProvider()
+googleProvider.setCustomParameters({ prompt: 'select_account' })
 
-export async function signUpWithEmail(email: string, password: string) {
-  const cred = await createUserWithEmailAndPassword(auth, email, password)
+export async function loginWithGoogle() {
+  const cred = await signInWithPopup(auth, googleProvider)
   return cred.user
 }
 
