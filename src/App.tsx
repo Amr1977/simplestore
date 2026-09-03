@@ -8,6 +8,7 @@ import CartPage from '@/pages/CartPage'
 import CheckoutPage from '@/pages/CheckoutPage'
 import DownloadPage from '@/pages/DownloadPage'
 import AdminLoginPage from '@/pages/admin/LoginPage'
+import AdminSignupPage from '@/pages/admin/StoreSignupPage'
 import AdminDashboardPage from '@/pages/admin/DashboardPage'
 import AdminProductsPage from '@/pages/admin/ProductsPage'
 import AdminProductFormPage from '@/pages/admin/ProductFormPage'
@@ -15,6 +16,7 @@ import AdminCategoriesPage from '@/pages/admin/CategoriesPage'
 import AdminOrdersPage from '@/pages/admin/OrdersPage'
 import AdminOrderDetailPage from '@/pages/admin/OrderDetailPage'
 import AdminSettingsPage from '@/pages/admin/SettingsPage'
+import AdminStoresPage from '@/pages/admin/StoresListPage'
 import SeedPage from '@/pages/admin/SeedPage'
 
 export default function App() {
@@ -28,7 +30,9 @@ export default function App() {
       <Route path="/checkout" element={<CheckoutPage />} />
       <Route path="/download" element={<DownloadPage />} />
       <Route path="/admin/login" element={<AdminLoginPage />} />
+      <Route path="/admin/signup" element={<AdminSignupPage />} />
       <Route path="/admin" element={<AdminRoute><AdminDashboardPage /></AdminRoute>} />
+      <Route path="/admin/stores" element={<AdminRoute><AdminStoresPage /></AdminRoute>} />
       <Route path="/admin/products" element={<AdminRoute><AdminProductsPage /></AdminRoute>} />
       <Route path="/admin/products/new" element={<AdminRoute><AdminProductFormPage /></AdminRoute>} />
       <Route path="/admin/products/:id/edit" element={<AdminRoute><AdminProductFormPage /></AdminRoute>} />

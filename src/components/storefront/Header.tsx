@@ -5,6 +5,7 @@ import { useStore } from '@/features/store/StoreContext'
 import { useCart } from '@/features/cart/CartContext'
 import { useCategories } from '@/features/categories/useCategories'
 import { ThemeToggle } from '@/features/theme'
+import { generateStoreLogo } from '@/lib/storeLogo'
 
 export default function Header() {
   const { store, storeId, loading } = useStore()
@@ -64,7 +65,13 @@ export default function Header() {
               <img
                 src={store.logo}
                 alt={store.name}
-                className="w-8 h-8 rounded-full object-cover"
+                onError={(e) => {
+                  const el = e.currentTarget
+                  if (el.dataset.fallback === '1') return
+                  el.dataset.fallback = '1'
+                  el.src = generateStoreLogo({ name: store.name, shape: 'square', size: { width: 64, height: 64 } })
+                }}
+                className="w-8 h-8 rounded-full object-cover bg-surface"
               />
             ) : (
               <div className="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center text-primary">

@@ -94,6 +94,15 @@ export function LoginPageInner({
             {loading ? 'جاري التحقق...' : 'تسجيل الدخول'}
           </button>
         </form>
+
+        <div className="mt-4 pt-4 border-t border-gray-200 text-center">
+          <p className="text-sm text-gray-600">
+            ليس لديك متجر بعد؟{' '}
+            <a href="/admin/signup" className="text-green-600 hover:text-green-700 font-medium">
+              أنشئ متجراً جديداً
+            </a>
+          </p>
+        </div>
       </div>
     </div>
   )

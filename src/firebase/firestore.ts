@@ -4,6 +4,7 @@ import {
   getDoc,
   getDocs,
   updateDoc,
+  setDoc,
   deleteDoc,
   query,
   where,
@@ -181,4 +182,20 @@ export function subscribeToOrders(storeId: string, callback: (orders: any[]) => 
   return onSnapshot(q, snap => {
     callback(snap.docs.map(d => ({ id: d.id, ...d.data() })))
   })
+}
+
+export async function getAllStores() {
+  const snap = await getDocs(collection(db, 'stores'))
+  return snap.docs.map(d => ({ id: d.id, ...d.data() })) as any[]
+}
+
+export async function createStore(storeId: string, data: any) {
+  const ref = doc(db, 'stores', storeId)
+  await setDoc(ref, { ...data, createdAt: serverTimestamp(), updatedAt: serverTimestamp() })
+  return storeId
+}
+
+export async function createUserProfile(uid: string, profile: { email: string; role: 'vendor'; storeId: string }) {
+  const ref = doc(db, 'userProfiles', uid)
+  await setDoc(ref, { ...profile, createdAt: serverTimestamp() })
 }

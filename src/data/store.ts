@@ -1,12 +1,13 @@
 import type { Store } from '@/types'
+import { generateStoreLogo } from '@/lib/storeLogo'
 
 export const store: Store = {
   id: 'abu-qir-demo',
   name: 'بقالة أبو قير',
   slug: 'abu-qir-grocery',
   description: 'كل احتياجات البيت في مكان واحد',
-  logo: 'https://res.cloudinary.com/demo/image/upload/grocery-demo/stores/abu-qir-demo/logo',
-  banner: 'https://res.cloudinary.com/demo/image/upload/grocery-demo/stores/abu-qir-demo/banner',
+  logo: generateStoreLogo({ name: 'بقالة أبو قير', shape: 'square' }),
+  banner: generateStoreLogo({ name: 'بقالة أبو قير', shape: 'banner' }),
   whatsappNumber: '201234567890',
   phone: '03-1234567',
   address: 'أبو قير - الإسكندرية',

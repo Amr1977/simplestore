@@ -1,9 +1,10 @@
 import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Package, FolderTree, ShoppingBag, Settings, LogOut } from 'lucide-react'
+import { LayoutDashboard, Package, FolderTree, ShoppingBag, Settings, LogOut, Store } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 
 const links = [
   { to: '/admin', icon: LayoutDashboard, label: 'لوحة التحكم', end: true },
+  { to: '/admin/stores', icon: Store, label: 'المتاجر' },
   { to: '/admin/products', icon: Package, label: 'المنتجات' },
   { to: '/admin/categories', icon: FolderTree, label: 'الأقسام' },
   { to: '/admin/orders', icon: ShoppingBag, label: 'الطلبات' },
