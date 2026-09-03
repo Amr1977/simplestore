@@ -1,11 +1,12 @@
 {
   "name": "abu-qir-grocery",
   "private": true,
-  "version": "1.0.0",
+  "version": "1.0.1",
   "type": "module",
   "scripts": {
     "dev": "npm run version && vite",
     "version": "node scripts/generate-version.mjs",
+    "version:bump": "node scripts/bump-version.mjs",
     "prebuild": "node scripts/generate-version.mjs",
     "predev": "node scripts/generate-version.mjs",
     "build": "tsc -b && vite build",

@@ -9,14 +9,20 @@
 #     test: / build: / ci: / chore: / revert:  → patch
 #   - anything else (e.g. merge commits)       → no bump
 #
-# Stash the user's local changes (uncommitted) before bumping so the hook
-# never blocks a commit due to working-tree dirt, then leave them as-is.
+# Safety: refuse to bump if the previous commit was already an auto-version-bump
+# (prevents infinite loop when the bump files are amended in).
+
+LAST_SUBJECT=$(git log -1 --pretty=%s)
+case "$LAST_SUBJECT" in
+  "chore(release): bump version to v"*) exit 0 ;;
+esac
 
 node scripts/generate-version.mjs auto
+NEW_VERSION=$(cat public/VERSION | tr -d ' \n')
 
-# If the version changed, amend the commit so the bump is included in it
-# (so a single commit = single version bump, like quran_lights).
-if ! git diff --cached --quiet public/VERSION package.json src/generated/version.ts 2>/dev/null; then
-  git add public/VERSION package.json src/generated/version.ts
-  git commit --amend --no-edit --no-verify
+git add public/VERSION package.json src/generated/version.ts public/version.json 2>/dev/null
+
+# Only commit if something actually changed (i.e. a bump happened)
+if ! git diff --cached --quiet; then
+  git commit --no-verify -m "chore(release): bump version to v${NEW_VERSION}"
 fi
