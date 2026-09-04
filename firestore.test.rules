@@ -1,0 +1,80 @@
+rules_version = '2';
+
+// Test-only rules. Mirrors firestore.rules but uses a wildcard super-admin
+// pattern so e2e tests can sign in as admin@test.local. NEVER deploy this
+// to production.
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    function isSuperAdmin() {
+      return request.auth != null
+        && (
+          request.auth.token.email == 'amr.lotfy.authman@gmail.com'
+          || request.auth.token.email.matches('.*@test\\.local')
+        );
+    }
+
+    function isAuthenticated() {
+      return request.auth != null;
+    }
+
+    function callerProfile() {
+      return get(/databases/$(database)/documents/userProfiles/$(request.auth.uid));
+    }
+
+    function callerRole() {
+      return isAuthenticated() ? callerProfile().data.role : null;
+    }
+
+    function callerStoreId() {
+      return isAuthenticated() ? callerProfile().data.storeId : null;
+    }
+
+    function belongsToStore(storeId) {
+      return isAuthenticated() && callerStoreId() == storeId;
+    }
+
+    match /userProfiles/{userId} {
+      allow read: if (isAuthenticated() && request.auth.uid == userId) || isSuperAdmin();
+      allow create: if (isAuthenticated()
+        && request.auth.uid == userId
+        && request.resource.data.role in ['vendor', 'super_admin']
+        && request.resource.data.storeId is string
+        && request.resource.data.email == request.auth.token.email)
+        || isSuperAdmin();
+      allow update: if (isAuthenticated() && request.auth.uid == userId) || isSuperAdmin();
+      allow delete: if isSuperAdmin();
+    }
+
+    match /stores/{storeId} {
+      allow read: if true;
+      allow create: if isAuthenticated();
+      allow update, delete: if isSuperAdmin() || belongsToStore(storeId);
+
+      match /categories/{categoryId} {
+        allow read: if true;
+        allow write: if isSuperAdmin() || belongsToStore(storeId);
+      }
+
+      match /products/{productId} {
+        allow read: if true;
+        allow write: if isSuperAdmin() || belongsToStore(storeId);
+      }
+
+      match /orders/{orderId} {
+        allow read: if true;
+        allow create: if true;
+        allow update, delete: if isSuperAdmin() || belongsToStore(storeId);
+      }
+
+      match /settings/{settingId} {
+        allow read: if true;
+        allow write: if isSuperAdmin() || belongsToStore(storeId);
+      }
+    }
+
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

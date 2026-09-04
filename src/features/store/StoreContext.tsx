@@ -1,4 +1,4 @@
-import { createContext, useContext, useState, useEffect } from 'react'
+import { createContext, useContext, useState, useEffect, useCallback } from 'react'
 import type { ReactNode } from 'react'
 import { getStoreBySlug } from '@/firebase/firestore'
 import type { Store } from '@/types'
@@ -8,6 +8,7 @@ interface StoreContextValue {
   storeId: string
   loading: boolean
   error: string | null
+  refresh: () => Promise<void>
 }
 
 export const CreateStoreContext = createContext<StoreContextValue | undefined>(undefined)
@@ -22,40 +23,38 @@ export function StoreProvider({ children, slug }: StoreProviderProps) {
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState<string | null>(null)
 
-  useEffect(() => {
-    let cancelled = false
-
-    async function loadStore() {
-      setLoading(true)
-      setError(null)
-      try {
-        const data = await getStoreBySlug(slug)
-        if (!cancelled) {
-          setStore(data)
-          if (!data) {
-            setError('المتجر غير موجود')
-          }
-        }
-      } catch (e) {
-        if (!cancelled) {
-          setError('فشل تحميل بيانات المتجر')
-        }
-      } finally {
-        if (!cancelled) {
-          setLoading(false)
-        }
+  const loadStore = useCallback(async () => {
+    setLoading(true)
+    setError(null)
+    try {
+      const data = await getStoreBySlug(slug)
+      setStore(data)
+      if (!data) {
+        setError('المتجر غير موجود')
       }
-    }
-
-    loadStore()
-
-    return () => {
-      cancelled = true
+    } catch (e) {
+      setError('فشل تحميل بيانات المتجر')
+    } finally {
+      setLoading(false)
     }
   }, [slug])
 
+  useEffect(() => {
+    let cancelled = false
+    async function run() {
+      if (cancelled) return
+      await loadStore()
+    }
+    run()
+    return () => {
+      cancelled = true
+    }
+  }, [loadStore])
+
   return (
-    <CreateStoreContext.Provider value={{ store, storeId: store?.id ?? '', loading, error }}>
+    <CreateStoreContext.Provider
+      value={{ store, storeId: store?.id ?? '', loading, error, refresh: loadStore }}
+    >
       {children}
     </CreateStoreContext.Provider>
   )

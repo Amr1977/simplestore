@@ -17,6 +17,20 @@ import {
 } from 'firebase/firestore'
 import { db } from './config'
 
+// Firestore rejects `undefined` field values with:
+//   "Unsupported field value: undefined"
+// Strip them recursively before any updateDoc/setDoc call.
+function stripUndefined<T extends Record<string, any>>(obj: T): Partial<T> {
+  const out: any = {}
+  for (const key in obj) {
+    if (!Object.prototype.hasOwnProperty.call(obj, key)) continue
+    const value = obj[key]
+    if (value === undefined) continue
+    out[key] = value
+  }
+  return out
+}
+
 export async function getStore(storeId: string) {
   const ref = doc(db, 'stores', storeId)
   const snap = await getDoc(ref)
@@ -133,7 +147,7 @@ export async function updateOrderStatus(storeId: string, orderId: string, status
 
 export async function updateStore(storeId: string, data: Partial<any>) {
   const ref = doc(db, 'stores', storeId)
-  await updateDoc(ref, { ...data, updatedAt: serverTimestamp() })
+  await updateDoc(ref, { ...stripUndefined(data), updatedAt: serverTimestamp() })
 }
 
 export async function createProduct(storeId: string, data: any) {
@@ -147,7 +161,7 @@ export async function createProduct(storeId: string, data: any) {
 
 export async function updateProduct(storeId: string, productId: string, data: Partial<any>) {
   const ref = doc(db, 'stores', storeId, 'products', productId)
-  await updateDoc(ref, { ...data, updatedAt: serverTimestamp() })
+  await updateDoc(ref, { ...stripUndefined(data), updatedAt: serverTimestamp() })
 }
 
 export async function deleteProduct(storeId: string, productId: string) {
@@ -166,7 +180,7 @@ export async function createCategory(storeId: string, data: any) {
 
 export async function updateCategory(storeId: string, categoryId: string, data: Partial<any>) {
   const ref = doc(db, 'stores', storeId, 'categories', categoryId)
-  await updateDoc(ref, { ...data, updatedAt: serverTimestamp() })
+  await updateDoc(ref, { ...stripUndefined(data), updatedAt: serverTimestamp() })
 }
 
 export async function deleteCategory(storeId: string, categoryId: string) {

@@ -1,5 +1,5 @@
-import { NavLink } from 'react-router-dom'
-import { LayoutDashboard, Package, FolderTree, ShoppingBag, Settings, LogOut, Store } from 'lucide-react'
+import { NavLink, useNavigate, Link } from 'react-router-dom'
+import { LayoutDashboard, Package, FolderTree, ShoppingBag, Settings, LogOut, Store, ExternalLink } from 'lucide-react'
 import { useAuth } from '@/features/auth'
 
 const links = [
@@ -13,12 +13,23 @@ const links = [
 
 export default function Sidebar() {
   const { logout } = useAuth()
+  const navigate = useNavigate()
+
+  const handleLogout = async () => {
+    try {
+      await logout()
+    } catch (err) {
+      console.error('Logout failed', err)
+    } finally {
+      navigate('/', { replace: true })
+    }
+  }
 
   return (
     <>
-      <aside className="hidden md:flex flex-col fixed right-0 top-0 bottom-0 w-64 bg-surface-elevated border-l border-gray-200 z-40">
-        <div className="p-4 border-b border-gray-200">
-          <h1 className="text-xl font-bold text-green-700">إدارة المتجر</h1>
+      <aside className="hidden md:flex flex-col fixed right-0 top-0 bottom-0 w-64 bg-surface-elevated border-l border-border z-40">
+        <div className="p-4 border-b border-border">
+          <h1 className="text-xl font-bold text-primary">إدارة المتجر</h1>
         </div>
         <nav className="flex-1 p-3 space-y-1">
           {links.map(link => (
@@ -29,8 +40,8 @@ export default function Sidebar() {
               className={({ isActive }) =>
                 `flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium transition-colors ${
                   isActive
-                    ? 'bg-green-50 text-green-700'
-                    : 'text-gray-600 hover:bg-gray-50 hover:text-gray-900'
+                    ? 'bg-primary/10 text-primary'
+                    : 'text-ink hover:bg-surface'
                 }`
               }
             >
@@ -38,10 +49,18 @@ export default function Sidebar() {
               {link.label}
             </NavLink>
           ))}
+          <Link
+            to="/"
+            className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-ink hover:bg-surface transition-colors border-t border-border mt-2 pt-3"
+          >
+            <ExternalLink className="w-5 h-5 text-muted" />
+            عرض المتجر
+          </Link>
         </nav>
-        <div className="p-3 border-t border-gray-200">
+        <div className="p-3 border-t border-border">
           <button
-            onClick={logout}
+            type="button"
+            onClick={handleLogout}
             className="flex items-center gap-3 px-3 py-2.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition-colors w-full"
           >
             <LogOut className="w-5 h-5" />
@@ -50,15 +69,15 @@ export default function Sidebar() {
         </div>
       </aside>
 
-      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface-elevated border-t border-gray-200 z-40 flex justify-around py-2">
-        {links.map(link => (
+      <nav className="md:hidden fixed bottom-0 left-0 right-0 bg-surface-elevated border-t border-border z-40 flex justify-around py-2">
+        {links.slice(0, 5).map(link => (
           <NavLink
             key={link.to}
             to={link.to}
             end={link.end}
             className={({ isActive }) =>
               `flex flex-col items-center gap-0.5 p-2 rounded-lg text-xs transition-colors ${
-                isActive ? 'text-green-700' : 'text-gray-500'
+                isActive ? 'text-primary' : 'text-muted'
               }`
             }
           >
@@ -66,6 +85,14 @@ export default function Sidebar() {
             <span>{link.label}</span>
           </NavLink>
         ))}
+        <button
+          type="button"
+          onClick={handleLogout}
+          className="flex flex-col items-center gap-0.5 p-2 rounded-lg text-xs text-red-500"
+        >
+          <LogOut className="w-5 h-5" />
+          <span>خروج</span>
+        </button>
       </nav>
     </>
   )

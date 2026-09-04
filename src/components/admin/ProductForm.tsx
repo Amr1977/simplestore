@@ -50,7 +50,11 @@ export default function ProductForm({ product, storeId, categories, onSave, onCa
         sortOrder: media.length + uploads.length,
       })
     }
-    setMedia(prev => [...prev, ...uploads])
+    // New uploads become primary: place them at sortOrder 0 and shift the rest.
+    setMedia(prev => {
+      const shifted = prev.map(m => ({ ...m, sortOrder: m.sortOrder + uploads.length }))
+      return [...uploads.map((u, i) => ({ ...u, sortOrder: i })), ...shifted]
+    })
   }
 
   const validate = () => {

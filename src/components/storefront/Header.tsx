@@ -1,9 +1,23 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { ShoppingCart, Menu, X, Store, Home, Search, Phone, MapPin, Download } from 'lucide-react'
+import {
+  ShoppingCart,
+  Menu,
+  X,
+  Store,
+  Home,
+  Search,
+  Phone,
+  MapPin,
+  Download,
+  LayoutDashboard,
+  LogIn,
+  LogOut,
+} from 'lucide-react'
 import { useStore } from '@/features/store/StoreContext'
 import { useCart } from '@/features/cart/CartContext'
 import { useCategories } from '@/features/categories/useCategories'
+import { useAuth } from '@/features/auth'
 import { ThemeToggle } from '@/features/theme'
 import { generateStoreLogo } from '@/lib/storeLogo'
 
@@ -11,6 +25,7 @@ export default function Header() {
   const { store, storeId, loading } = useStore()
   const { getCartCount } = useCart()
   const { categories } = useCategories(storeId)
+  const { user, logout } = useAuth()
   const navigate = useNavigate()
   const itemCount = getCartCount()
   const [isMenuOpen, setIsMenuOpen] = useState(false)
@@ -33,6 +48,17 @@ export default function Header() {
     navigate(path)
   }
 
+  const handleAdminSignOut = async () => {
+    setIsMenuOpen(false)
+    try {
+      await logout()
+    } catch (err) {
+      console.error('Logout failed', err)
+    } finally {
+      navigate('/')
+    }
+  }
+
   if (loading || !store) {
     return (
       <header className="sticky top-0 z-50 bg-surface-elevated/90 backdrop-blur-md border-b border-border">
@@ -49,18 +75,17 @@ export default function Header() {
     <>
       <header className="sticky top-0 z-50 bg-surface-elevated/90 backdrop-blur-md border-b border-border">
         <div className="max-w-7xl mx-auto px-4 h-14 flex items-center justify-between">
-          <button
-            type="button"
-            onClick={() => setIsMenuOpen(true)}
-            className="p-2 -mr-2 rounded-full hover:bg-gray-100 transition md:hidden"
-            aria-label="فتح القائمة"
-            aria-expanded={isMenuOpen}
-            aria-controls="mobile-menu"
-          >
-            <Menu size={22} />
-          </button>
-
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-2">
+            <button
+              type="button"
+              onClick={() => setIsMenuOpen(true)}
+              className="md:hidden p-2 -mr-1 rounded-full hover:bg-border/40 transition"
+              aria-label="فتح القائمة"
+              aria-expanded={isMenuOpen}
+              aria-controls="mobile-menu"
+            >
+              <Menu size={22} />
+            </button>
             {store.logo ? (
               <img
                 src={store.logo}
@@ -85,6 +110,41 @@ export default function Header() {
 
           <div className="flex items-center gap-1">
             <ThemeToggle />
+            {user ? (
+              <div className="hidden md:flex items-center gap-1">
+                <button
+                  type="button"
+                  onClick={() => navigate('/admin')}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium text-ink hover:bg-border/40 transition"
+                  title="لوحة التحكم"
+                  aria-label="لوحة التحكم"
+                >
+                  <LayoutDashboard size={18} className="text-muted" />
+                  <span className="hidden lg:inline">لوحة التحكم</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleAdminSignOut}
+                  className="flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium text-red-600 hover:bg-red-50 transition"
+                  title="تسجيل الخروج"
+                  aria-label="تسجيل الخروج"
+                >
+                  <LogOut size={18} />
+                  <span className="hidden lg:inline">خروج</span>
+                </button>
+              </div>
+            ) : (
+              <button
+                type="button"
+                onClick={() => navigate('/admin/login')}
+                className="hidden md:flex items-center gap-1.5 px-2.5 py-1.5 rounded-lg text-sm font-medium text-ink hover:bg-border/40 transition"
+                title="تسجيل دخول المسؤول"
+                aria-label="تسجيل دخول المسؤول"
+              >
+                <LogIn size={18} className="text-muted" />
+                <span className="hidden lg:inline">دخول</span>
+              </button>
+            )}
             <button
               type="button"
               onClick={() => navigate('/cart')}
@@ -198,6 +258,54 @@ export default function Header() {
                   </ul>
                 </div>
               )}
+
+              <div className="mt-6 px-3 border-t border-border pt-4">
+                <h2 className="px-4 mb-2 text-xs font-bold text-muted uppercase tracking-wider">
+                  المسؤول
+                </h2>
+                <ul className="space-y-1">
+                  {user ? (
+                    <>
+                      <li>
+                        <button
+                          type="button"
+                          onClick={() => handleNav('/admin')}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-ink hover:bg-border/40 transition text-right"
+                        >
+                          <LayoutDashboard size={20} className="text-muted" />
+                          <span className="font-medium">لوحة التحكم</span>
+                        </button>
+                      </li>
+                      <li>
+                        <div className="px-4 py-2 text-xs text-muted truncate" dir="ltr">
+                          {user.email}
+                        </div>
+                      </li>
+                      <li>
+                        <button
+                          type="button"
+                          onClick={handleAdminSignOut}
+                          className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-red-600 hover:bg-red-50 transition text-right"
+                        >
+                          <LogOut size={20} />
+                          <span className="font-medium">تسجيل الخروج</span>
+                        </button>
+                      </li>
+                    </>
+                  ) : (
+                    <li>
+                      <button
+                        type="button"
+                        onClick={() => handleNav('/admin/login')}
+                        className="w-full flex items-center gap-3 px-4 py-3 rounded-lg text-ink hover:bg-border/40 transition text-right"
+                      >
+                        <LogIn size={20} className="text-muted" />
+                        <span className="font-medium">تسجيل دخول المسؤول</span>
+                      </button>
+                    </li>
+                  )}
+                </ul>
+              </div>
             </nav>
 
             <div className="px-5 py-4 border-t border-border space-y-2 text-sm text-muted">
